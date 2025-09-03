@@ -10,8 +10,8 @@ const fontBody = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'ReminderPro',
-  description: 'An intelligent reminder app to help you stay organized.',
+  title: 'Attendance Monitor',
+  description: 'An intelligent attendance monitoring system.',
 };
 
 export default function RootLayout({
