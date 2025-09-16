@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,7 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -116,6 +117,63 @@ export default function LoginPage() {
     }
   };
 
+  const createDemoAccounts = async () => {
+    setDemoLoading(true);
+    const demoAccounts = [
+      { email: 'admin@example.com', password: 'password', role: 'admin' },
+      { email: 'hod@example.com', password: 'password', role: 'hod' },
+      { email: 'staff@example.com', password: 'password', role: 'staff' },
+    ];
+
+    try {
+      for (const acc of demoAccounts) {
+        try {
+          // Try to sign in first to check if user exists
+          await signInWithEmailAndPassword(auth, acc.email, acc.password);
+          const user = auth.currentUser;
+          if (user) {
+             const userRef = doc(db, "users", user.uid);
+             await setDoc(userRef, { role: acc.role }, { merge: true });
+          }
+        } catch (error: any) {
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+            // User does not exist, so create it
+            const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
+            const user = userCredential.user;
+            await setDoc(doc(db, "users", user.uid), {
+              uid: user.uid,
+              displayName: user.email,
+              email: user.email,
+              createdAt: serverTimestamp(),
+              lastLogin: serverTimestamp(),
+              role: acc.role
+            });
+          } else {
+            // Other sign-in error
+            throw error;
+          }
+        }
+      }
+      toast({
+        title: 'Demo Accounts Ready',
+        description: 'Admin, HOD, and Staff accounts are ready. Use password: "password"',
+      });
+    } catch (error) {
+      console.error("Error creating demo accounts:", error);
+      toast({
+        title: 'Creation Failed',
+        description: 'Could not create demo accounts. Check the console for errors.',
+        variant: 'destructive',
+      });
+    } finally {
+      setDemoLoading(false);
+      // It's good practice to sign out after creating accounts
+      if (auth.currentUser) {
+        await auth.signOut();
+      }
+    }
+  };
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
@@ -176,30 +234,35 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
-            {googleLoading ? (
-              'Signing in...'
-            ) : (
-              <>
-                <svg
-                  className="mr-2 h-4 w-4"
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fab"
-                  data-icon="google"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 488 512"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 25.4 169.5 67.2l-62.4 62.4c-21.6-20.5-51.5-32.6-86.2-32.6-64.2 0-116.6 54.2-116.6 121.3s52.4 121.3 116.6 121.3c71.3 0 95.8-52.9 98.8-79.1H248v-61.6h236.4c2.4 12.8 3.6 26.4 3.6 41.8z"
-                  ></path>
-                </svg>
-                Sign in with Google
-              </>
-            )}
-          </Button>
+          <div className="space-y-2">
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
+              {googleLoading ? (
+                'Signing in...'
+              ) : (
+                <>
+                  <svg
+                    className="mr-2 h-4 w-4"
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="fab"
+                    data-icon="google"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 488 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 25.4 169.5 67.2l-62.4 62.4c-21.6-20.5-51.5-32.6-86.2-32.6-64.2 0-116.6 54.2-116.6 121.3s52.4 121.3 116.6 121.3c71.3 0 95.8-52.9 98.8-79.1H248v-61.6h236.4c2.4 12.8 3.6 26.4 3.6 41.8z"
+                    ></path>
+                  </svg>
+                  Sign in with Google
+                </>
+              )}
+            </Button>
+            <Button variant="secondary" className="w-full" onClick={createDemoAccounts} disabled={demoLoading}>
+              {demoLoading ? 'Creating...' : 'Create Demo Accounts'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
