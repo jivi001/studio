@@ -10,13 +10,13 @@ body {
 @layer base {
   :root {
     --background: 222.2 47.4% 11.2%;
-    --foreground: 210 40% 98%;
+    --foreground: 222.2 47.4% 11.2%;
     --card: 222.2 47.4% 11.2%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 47.4% 11.2%;
     --popover-foreground: 210 40% 98%;
     --primary: 36 100% 60%; /* Saffron/Orange */
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 210 100% 20%; /* Deep Blue */
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;

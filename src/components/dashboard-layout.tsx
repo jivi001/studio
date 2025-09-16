@@ -135,7 +135,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <h1 className="text-xl font-bold tracking-tight">
               Attendance Monitor
             </h1>
-            <Badge variant="outline" className="text-sm border-white/30 text-white">
+            <Badge variant="outline" className="text-sm border-primary/50 text-primary-foreground bg-primary">
               {role}
             </Badge>
           </div>
@@ -143,7 +143,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Sheet>
               <SheetTrigger asChild>
                 <div className="relative">
-                  <Button variant="outline" size="icon" className="h-9 w-9 bg-transparent hover:bg-white/20 text-white hover:text-white border-white/30">
+                  <Button variant="outline" size="icon" className="h-9 w-9 bg-transparent hover:bg-white/20 text-foreground hover:text-foreground border-foreground/30">
                       <Bell className="h-4 w-4" />
                       <span className="sr-only">Toggle notifications</span>
                   </Button>
@@ -183,14 +183,14 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9 bg-transparent hover:bg-white/20 border-white/30">
+                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9 bg-transparent hover:bg-white/20 border-foreground/30">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
                       <AvatarFallback>{role.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-background/80 backdrop-blur-xl border-white/20">
+                <DropdownMenuContent align="end" className="bg-white/10 backdrop-blur-lg border-white/20">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
