@@ -14,7 +14,7 @@ export default function StaffDashboard() {
           <CardHeader>
             <CardTitle>My Weekly Timetable</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4">
             <Timetable />
           </CardContent>
         </Card>
