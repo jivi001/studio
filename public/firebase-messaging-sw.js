@@ -1,8 +1,9 @@
 // public/firebase-messaging-sw.js
 
-// Scripts for Firebase products are imported here
-importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js');
+// Scripts for Firebase products are imported in the HTML unless you are using a bundler
+// (which Next.js is). In that case, you need to import them at the top of the service worker script.
+import { initializeApp } from 'firebase/app';
+import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,18 +16,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
-// Retrieve an instance of Firebase Messaging so that it can handle background messages.
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage((payload) => {
+// This listener handles messages received when the app is in the background or closed.
+onBackgroundMessage(messaging, (payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: '/firebase-logo.png' // You can add a custom icon here
+    icon: '/firebase-logo.png' // Optional: you can add an icon
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
