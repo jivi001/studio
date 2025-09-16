@@ -332,9 +332,14 @@ export default function LoginPage() {
                 </>
               )}
             </Button>
-            <Button variant="secondary" className="w-full" onClick={createDemoAccounts} disabled={demoLoading}>
-              {demoLoading ? 'Creating...' : 'Create Demo Accounts'}
-            </Button>
+            <div className='text-center'>
+              <Button variant="secondary" className="w-full" onClick={createDemoAccounts} disabled={demoLoading}>
+                {demoLoading ? 'Creating...' : 'Create Demo Accounts'}
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2 px-4">
+                Creates Admin, HOD, and Staff accounts to explore different roles. Use password: "password"
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

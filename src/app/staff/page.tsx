@@ -1,12 +1,17 @@
 // src/app/staff/page.tsx
 'use client';
 
+import type { Metadata } from 'next';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Timetable } from '@/components/timetable';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
+
+// export const metadata: Metadata = {
+//   title: 'Staff Dashboard | Attendance Monitor',
+// };
 
 export default function StaffDashboard() {
   return (
