@@ -15,7 +15,7 @@ import Link from 'next/link';
 
 export default function StaffDashboard() {
   return (
-    <DashboardLayout role="Staff">
+    <DashboardLayout role="Staff" title="Staff Dashboard">
       <div className="p-4 md:p-8">
         <div className="flex items-center justify-between mb-8">
           <div>

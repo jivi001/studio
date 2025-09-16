@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <DashboardLayout role="Admin">
+    <DashboardLayout role="Admin" title="Admin Dashboard">
       <div className="p-4 md:p-8">
         <div className="flex items-center justify-between mb-8">
           <div>

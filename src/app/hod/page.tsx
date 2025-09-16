@@ -53,7 +53,7 @@ export default function HodDashboard() {
   };
 
   return (
-    <DashboardLayout role="HOD">
+    <DashboardLayout role="HOD" title="HOD Dashboard">
       <div className="p-4 md:p-8">
         <div className="flex items-center justify-between mb-8">
           <div>
