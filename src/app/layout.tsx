@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0A102A',
+  themeColor: '#1E40AF',
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#0A102A" />
+        <meta name="theme-color" content="#1E40AF" />
       </head>
       <body
         className={cn(
