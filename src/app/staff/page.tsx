@@ -15,7 +15,7 @@ export default function StaffDashboard() {
             <h1 className="text-2xl font-bold">Staff Dashboard</h1>
             <p className="mt-2 text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
           </div>
-          <Link href="https://example.com/attendance" target="_blank" rel="noopener noreferrer">
+          <Link href="https://vetiasportal.vetias.ac.in/IMPRESVCET/" target="_blank" rel="noopener noreferrer">
             <Button>
               Submit Attendance
               <ArrowUpRight className="ml-2 h-4 w-4" />
