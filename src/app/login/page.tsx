@@ -105,7 +105,7 @@ export default function LoginPage() {
       console.error('Email sign-in error:', error);
       let description = 'An unexpected error occurred. Please try again.';
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        description = 'Invalid email or password.';
+        description = 'Invalid email or password. Please try again or create an account.';
       }
       toast({
         title: 'Authentication Failed',
@@ -119,6 +119,11 @@ export default function LoginPage() {
 
   const createDemoAccounts = async () => {
     setDemoLoading(true);
+    // It's good practice to sign out before creating accounts
+    if (auth.currentUser) {
+        await auth.signOut();
+    }
+
     const demoAccounts = [
       { email: 'admin@example.com', password: 'password', role: 'admin' },
       { email: 'hod@example.com', password: 'password', role: 'hod' },
@@ -128,30 +133,32 @@ export default function LoginPage() {
     try {
       for (const acc of demoAccounts) {
         try {
-          // Try to sign in first to check if user exists
-          await signInWithEmailAndPassword(auth, acc.email, acc.password);
-          const user = auth.currentUser;
-          if (user) {
-             const userRef = doc(db, "users", user.uid);
-             await setDoc(userRef, { role: acc.role }, { merge: true });
-          }
+          // Attempt to create the user. If they already exist, this will fail.
+          const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
+          const user = userCredential.user;
+          await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            displayName: acc.email,
+            email: acc.email,
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp(),
+            role: acc.role
+          });
         } catch (error: any) {
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-            // User does not exist, so create it
-            const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
+          if (error.code === 'auth/email-already-in-use') {
+            // User already exists, sign in to get UID and update role if needed.
+            const userCredential = await signInWithEmailAndPassword(auth, acc.email, acc.password);
             const user = userCredential.user;
-            await setDoc(doc(db, "users", user.uid), {
-              uid: user.uid,
-              displayName: user.email,
-              email: user.email,
-              createdAt: serverTimestamp(),
-              lastLogin: serverTimestamp(),
-              role: acc.role
-            });
+            const userRef = doc(db, "users", user.uid);
+            await setDoc(userRef, { role: acc.role }, { merge: true });
           } else {
-            // Other sign-in error
+            // Another error occurred during creation
             throw error;
           }
+        }
+         // Sign out after each operation to ensure a clean state
+        if (auth.currentUser) {
+            await auth.signOut();
         }
       }
       toast({
@@ -159,7 +166,7 @@ export default function LoginPage() {
         description: 'Admin, HOD, and Staff accounts are ready. Use password: "password"',
       });
     } catch (error) {
-      console.error("Error creating demo accounts:", error);
+      console.error("Error creating/updating demo accounts:", error);
       toast({
         title: 'Creation Failed',
         description: 'Could not create demo accounts. Check the console for errors.',
@@ -167,10 +174,6 @@ export default function LoginPage() {
       });
     } finally {
       setDemoLoading(false);
-      // It's good practice to sign out after creating accounts
-      if (auth.currentUser) {
-        await auth.signOut();
-      }
     }
   };
 
