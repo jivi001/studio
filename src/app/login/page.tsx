@@ -3,60 +3,86 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+
+
+const formSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+});
+
 
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const handleSuccessfulLogin = async (user: any) => {
+    if (user.email) {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      let role = 'staff'; // Default role
+
+      if (userSnap.exists()) {
+        // User exists, update last login
+        await updateDoc(userRef, {
+          lastLogin: serverTimestamp()
+        });
+        role = userSnap.data().role || 'staff';
+      } else {
+        // New user, create profile
+        await setDoc(userRef, {
+          uid: user.uid,
+          displayName: user.displayName || user.email,
+          email: user.email,
+          photoURL: user.photoURL,
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp(),
+          role: 'staff' // Assign default role
+        });
+      }
+      
+      toast({
+        title: 'Login Successful',
+        description: `Welcome, ${user.displayName || user.email}! Redirecting...`,
+      });
+
+      router.push(`/${role}`);
+    } else {
+      throw new Error('No email found for user.');
+    }
+  };
+
 
   const handleGoogleSignIn = async () => {
-    setLoading(true);
+    setGoogleLoading(true);
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      if (user.email) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-
-        let role = 'staff'; // Default role
-
-        if (userSnap.exists()) {
-          // User exists, update last login
-          await updateDoc(userRef, {
-            lastLogin: serverTimestamp()
-          });
-          role = userSnap.data().role || 'staff';
-        } else {
-          // New user, create profile
-          await setDoc(userRef, {
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            createdAt: serverTimestamp(),
-            lastLogin: serverTimestamp(),
-            role: 'staff' // Assign default role
-          });
-        }
-        
-        toast({
-          title: 'Login Successful',
-          description: `Welcome, ${user.displayName}! Redirecting...`,
-        });
-
-        router.push(`/${role}`);
-      } else {
-        throw new Error('No email found for user.');
-      }
+      await handleSuccessfulLogin(result.user);
     } catch (error) {
       console.error('Authentication error:', error);
       toast({
@@ -65,9 +91,31 @@ export default function LoginPage() {
         variant: 'destructive',
       });
     } finally {
+      setGoogleLoading(false);
+    }
+  };
+  
+  const handleEmailSignIn = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    try {
+      const result = await signInWithEmailAndPassword(auth, values.email, values.password);
+      await handleSuccessfulLogin(result.user);
+    } catch (error: any) {
+      console.error('Email sign-in error:', error);
+      let description = 'An unexpected error occurred. Please try again.';
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        description = 'Invalid email or password.';
+      }
+      toast({
+        title: 'Authentication Failed',
+        description,
+        variant: 'destructive',
+      });
+    } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
@@ -83,8 +131,53 @@ export default function LoginPage() {
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button className="w-full" onClick={handleGoogleSignIn} disabled={loading}>
-            {loading ? (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleEmailSignIn)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="name@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="••••••••" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign in with Email'}
+              </Button>
+            </form>
+          </Form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
+            {googleLoading ? (
               'Signing in...'
             ) : (
               <>
