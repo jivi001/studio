@@ -136,7 +136,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <h1 className="text-xl font-bold tracking-tight">
               Attendance Monitor
             </h1>
-            <Badge variant="outline" className="text-sm border-primary/50 text-primary-foreground bg-primary">
+            <Badge variant="outline" className="text-sm border-primary/50 text-primary bg-primary/20">
               {role}
             </Badge>
           </div>
@@ -210,7 +210,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <DialogContent className="bg-white/10 backdrop-blur-lg border-white/20">
+              <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Provide Feedback</DialogTitle>
                   <DialogDescription>
