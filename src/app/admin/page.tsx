@@ -91,7 +91,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         
-        <Card className="bg-white/10 backdrop-blur-lg border-white/20">
+        <Card>
           <CardHeader>
             <CardTitle>Weekly Timetable</CardTitle>
           </CardHeader>
