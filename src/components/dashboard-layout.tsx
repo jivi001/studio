@@ -4,7 +4,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Head from 'next/head';
-import { LogOut, User, Bell, MessageSquareQuote } from 'lucide-react';
+import { LogOut, User, Bell, MessageSquareQuote, X } from 'lucide-react';
 import { onMessage, messaging } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -129,7 +129,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         <title>{title}</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-white/10 px-4 backdrop-blur-lg sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
           <div className="flex items-center gap-3">
              <Logo className="h-7 w-7 text-primary" />
             <h1 className="text-xl font-bold tracking-tight text-foreground">
@@ -137,14 +137,14 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             </h1>
           </div>
           <div className="relative ml-auto flex-1 md:grow-0">
-            <Badge variant="outline" className="text-sm border-white/30">
+            <Badge variant="outline" className="text-sm">
               {role}
             </Badge>
           </div>
           <Sheet>
             <SheetTrigger asChild>
               <div className="relative">
-                <Button variant="outline" size="icon" className="h-8 w-8">
+                <Button variant="outline" size="icon" className="h-9 w-9">
                     <Bell className="h-4 w-4" />
                     <span className="sr-only">Toggle notifications</span>
                 </Button>
@@ -165,13 +165,13 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 <div className="mt-4 space-y-4">
                   {notifications.length > 0 ? (
                       notifications.map(notif => (
-                        <div key={notif.id} className="p-3 rounded-lg border bg-card/50 text-card-foreground flex justify-between items-start">
+                        <div key={notif.id} className="p-3 rounded-lg border bg-card text-card-foreground flex justify-between items-start gap-2">
                               <div className="flex flex-col">
                                   <p className="font-medium">{notif.title}</p>
                                   <p className="text-xs text-muted-foreground">{notif.body}</p>
                               </div>
-                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => clearNotification(notif.id)}>
-                                <LogOut className='h-4 w-4'/>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => clearNotification(notif.id)}>
+                                <X className='h-4 w-4'/>
                               </Button>
                           </div>
                       ))
@@ -191,7 +191,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
+              <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
@@ -216,7 +216,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 <DialogDescription>
                   We value your feedback. Please let us know your thoughts, suggestions, or any issues you've encountered.
                 </DialogDescription>
-              </DialogHeader>
+              </Header>
               <div className="grid gap-4 py-4">
                 <div className="grid w-full gap-2">
                   <Label htmlFor="feedback-message">Your Feedback</Label>
@@ -240,7 +240,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             </DialogContent>
           </Dialog>
         </header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </>
   );
