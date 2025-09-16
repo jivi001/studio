@@ -36,11 +36,11 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Logo } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { VcetLogo } from './vcet-logo';
 import placeholderImages from '@/lib/placeholder-images.json';
+import Image from 'next/image';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -59,7 +59,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
   ]);
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
-  const { userAvatar } = placeholderImages;
+  const { userAvatar, headerLogo } = placeholderImages;
 
 
   useEffect(() => {
@@ -134,7 +134,14 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
       <div className="flex min-h-screen w-full flex-col">
         <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white/10 px-4 backdrop-blur-lg sm:px-6 border-white/20">
           <div className="flex items-center gap-3">
-             <Logo className="h-7 w-7 text-primary" />
+             <Image 
+                src={headerLogo.src}
+                width={headerLogo.width}
+                height={headerLogo.height}
+                alt={headerLogo.alt}
+                data-ai-hint={headerLogo.hint}
+                className="h-8 w-auto"
+              />
             <h1 className="text-xl font-bold tracking-tight">
               Attendance Monitor
             </h1>

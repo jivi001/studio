@@ -8,7 +8,6 @@ import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from 'firebase/firest
 import { auth, db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Logo } from '@/components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +18,8 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { requestNotificationPermission } from '@/lib/fcm';
 import { VcetLogo } from '@/components/vcet-logo';
-
+import placeholderImages from '@/lib/placeholder-images.json';
+import Image from 'next/image';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -35,6 +35,7 @@ export default function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('signin');
+  const { headerLogo } = placeholderImages;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -242,7 +243,14 @@ export default function LoginPage() {
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
       <div className="hidden lg:flex lg:flex-col items-center justify-center p-8 text-foreground">
         <div className="flex items-center gap-4">
-            <Logo className="h-12 w-12" />
+            <Image 
+              src={headerLogo.src}
+              width={headerLogo.width}
+              height={headerLogo.height}
+              alt={headerLogo.alt}
+              data-ai-hint={headerLogo.hint}
+              className="h-12 w-auto"
+            />
             <h1 className="text-4xl font-bold tracking-tight">
             Attendance Monitor
             </h1>

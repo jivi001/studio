@@ -7,6 +7,13 @@
     "alt": "VCET Shield",
     "hint": "shield logo"
   },
+  "headerLogo": {
+    "src": "https://www.velalarengg.ac.in/wp-content/themes/vcet/assets/images/VCET-logo-new.png",
+    "width": 40,
+    "height": 40,
+    "alt": "VCET Header Logo",
+    "hint": "shield logo"
+  },
   "userAvatar": {
     "src": "https://www.velalarengg.ac.in/wp-content/themes/vcet/assets/images/VCET-logo-new.png",
     "width": 100,
