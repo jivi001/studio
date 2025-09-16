@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import Papa from 'papaparse';
-import { Upload, Download } from 'lucide-react';
+import { Upload, Download, Edit, Save, XCircle } from 'lucide-react';
 
 const initialDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const initialTimeSlots = [
@@ -70,13 +70,15 @@ const initialScheduleData: { [key: string]: { [key: string]: string } } = {
 
 export function Timetable() {
   const [scheduleData, setScheduleData] = useState(initialScheduleData);
+  const [draftData, setDraftData] = useState(initialScheduleData);
   const [days, setDays] = useState(initialDays);
   const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
+  const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleScheduleChange = (day: string, time: string, value: string) => {
-    setScheduleData((prev) => ({
+    setDraftData((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
@@ -84,6 +86,23 @@ export function Timetable() {
       },
     }));
   };
+
+  const handleEdit = () => {
+    setDraftData(scheduleData);
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    setScheduleData(draftData);
+    setIsEditing(false);
+    toast({ title: 'Success', description: 'Timetable saved successfully.' });
+  };
+
+  const handleCancel = () => {
+    setDraftData(scheduleData);
+    setIsEditing(false);
+  };
+
 
   const downloadCSV = () => {
     const csvData = [
@@ -132,6 +151,7 @@ export function Timetable() {
           setTimeSlots(newTimeSlots);
           setDays(newDays);
           setScheduleData(newScheduleData);
+          setDraftData(newScheduleData);
           toast({ title: 'Success', description: 'Timetable uploaded successfully.' });
         },
         error: (error) => {
@@ -152,6 +172,23 @@ export function Timetable() {
   return (
     <div>
       <div className="flex justify-end gap-2 mb-4">
+        {isEditing ? (
+          <>
+            <Button onClick={handleSave}>
+              <Save className="mr-2 h-4 w-4" />
+              Save
+            </Button>
+            <Button variant="outline" onClick={handleCancel}>
+              <XCircle className="mr-2 h-4 w-4" />
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <Button onClick={handleEdit}>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit Timetable
+          </Button>
+        )}
         <Button variant="outline" onClick={downloadCSV}>
           <Download className="mr-2 h-4 w-4" />
           Download CSV
@@ -183,11 +220,15 @@ export function Timetable() {
               <TableCell className="font-medium">{day}</TableCell>
               {timeSlots.map((time) => (
                 <TableCell key={time}>
-                  <Input
-                    value={scheduleData[day]?.[time] || ''}
-                    onChange={(e) => handleScheduleChange(day, time, e.target.value)}
-                    className="min-w-[120px]"
-                  />
+                  {isEditing ? (
+                    <Input
+                      value={draftData[day]?.[time] || ''}
+                      onChange={(e) => handleScheduleChange(day, time, e.target.value)}
+                      className="min-w-[120px]"
+                    />
+                  ) : (
+                    <span>{scheduleData[day]?.[time] || ''}</span>
+                  )}
                 </TableCell>
               ))}
             </TableRow>
