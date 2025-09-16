@@ -241,7 +241,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
-      <div className="hidden lg:flex lg:flex-col items-center justify-center p-8 text-foreground">
+      <div className="hidden lg:flex lg:flex-col items-center justify-center p-8">
         <div className="flex items-center gap-4">
             <Image 
               src={headerLogo.src}
@@ -251,17 +251,17 @@ export default function LoginPage() {
               data-ai-hint={headerLogo.hint}
               className="h-12 w-auto"
             />
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Attendance Monitor
             </h1>
         </div>
-        <p className="mt-4 text-center text-lg">
+        <p className="mt-4 text-center text-lg text-foreground/80">
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md bg-transparent">
+          <Card className="w-full max-w-md">
               <CardHeader className="text-center">
               <CardTitle>{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
@@ -360,17 +360,9 @@ export default function LoginPage() {
               </CardContent>
           </Card>
         </div>
-        <footer className="w-full border-t py-4">
-          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
+        <footer className="w-full border-t py-4 mt-auto">
+          <div className="container mx-auto flex items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
-            <div className="text-center">
-                <p className="text-sm font-semibold">
-                © {new Date().getFullYear()} Velalar College of Engineering and Technology. All Rights Reserved.
-                </p>
-                <p className="text-xs text-muted-foreground">
-                Autonomous Institution, Approved by AICTE, New Delhi & Affiliated to Anna University.
-                </p>
-            </div>
           </div>
         </footer>
       </div>
