@@ -129,7 +129,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         <title>{title}</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-white/10 px-4 backdrop-blur-lg sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white/10 px-4 backdrop-blur-lg sm:px-6 border-white/20">
           <div className="flex items-center gap-3">
              <Logo className="h-7 w-7 text-primary" />
             <h1 className="text-xl font-bold tracking-tight">
@@ -154,7 +154,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   )}
                 </div>
               </SheetTrigger>
-              <SheetContent className="bg-background/80 backdrop-blur-xl">
+              <SheetContent className="bg-white/10 backdrop-blur-lg border-white/20">
                   <SheetHeader>
                       <SheetTitle>Notifications</SheetTitle>
                       <SheetDescription>
@@ -164,7 +164,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   <div className="mt-4 space-y-4">
                     {notifications.length > 0 ? (
                         notifications.map(notif => (
-                          <div key={notif.id} className="p-3 rounded-lg border bg-card/80 text-card-foreground flex justify-between items-start gap-2">
+                          <div key={notif.id} className="p-3 rounded-lg border bg-card/80 text-card-foreground flex justify-between items-start gap-2 bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
                                 <div className="flex flex-col">
                                     <p className="font-medium">{notif.title}</p>
                                     <p className="text-xs text-muted-foreground">{notif.body}</p>
@@ -209,7 +209,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <DialogContent className="bg-background/80 backdrop-blur-xl">
+              <DialogContent className="bg-white/10 backdrop-blur-lg border-white/20">
                 <DialogHeader>
                   <DialogTitle>Provide Feedback</DialogTitle>
                   <DialogDescription>
@@ -225,6 +225,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                       rows={6}
                       value={feedback}
                       onChange={(e) => setFeedback(e.target.value)}
+                      className="bg-transparent"
                     />
                   </div>
                 </div>
