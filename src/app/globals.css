@@ -9,19 +9,19 @@ body {
 @layer base {
   :root {
     --background: 222.2 47.4% 11.2%;
-    --foreground: 210 40% 98%;
+    --foreground: 0 0% 0%;
     --card: 0 0% 100% / 0.1;
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 0 0% 0%;
     --popover: 0 0% 100% / 0.1;
-    --popover-foreground: 210 40% 98%;
+    --popover-foreground: 0 0% 0%;
     --primary: 36 100% 60%; /* Saffron/Orange */
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 210 100% 20%; /* Deep Blue */
-    --secondary-foreground: 210 40% 98%;
+    --secondary-foreground: 0 0% 0%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 22.5%;
@@ -36,19 +36,19 @@ body {
   }
   .dark {
     --background: 222.2 47.4% 11.2%;
-    --foreground: 210 40% 98%;
+    --foreground: 0 0% 0%;
     --card: 222.2 47.4% 11.2%;
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 0 0% 0%;
     --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 40% 98%;
+    --popover-foreground: 0 0% 0%;
     --primary: 36 100% 60%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 210 100% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary-foreground: 0 0% 0%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
