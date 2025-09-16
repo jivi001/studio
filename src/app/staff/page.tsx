@@ -2,13 +2,26 @@
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Timetable } from '@/components/timetable';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function StaffDashboard() {
   return (
     <DashboardLayout role="Staff">
       <div className="p-8">
-        <h1 className="text-2xl font-bold">Staff Dashboard</h1>
-        <p className="mt-2 text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Staff Dashboard</h1>
+            <p className="mt-2 text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
+          </div>
+          <Link href="https://example.com/attendance" target="_blank" rel="noopener noreferrer">
+            <Button>
+              Submit Attendance
+              <ArrowUpRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
         
         <Card className="mt-8">
           <CardHeader>
