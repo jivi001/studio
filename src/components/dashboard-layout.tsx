@@ -129,13 +129,13 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         <title>{title}</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-white/10 px-4 text-white backdrop-blur-lg sm:px-6">
           <div className="flex items-center gap-3">
              <Logo className="h-7 w-7 text-primary" />
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
+            <h1 className="text-xl font-bold tracking-tight">
               Attendance Monitor
             </h1>
-            <Badge variant="outline" className="text-sm">
+            <Badge variant="outline" className="text-sm border-white/50 text-white">
               {role}
             </Badge>
           </div>
@@ -143,7 +143,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Sheet>
               <SheetTrigger asChild>
                 <div className="relative">
-                  <Button variant="outline" size="icon" className="h-9 w-9">
+                  <Button variant="outline" size="icon" className="h-9 w-9 bg-transparent border-white/50 hover:bg-white/20 text-white">
                       <Bell className="h-4 w-4" />
                       <span className="sr-only">Toggle notifications</span>
                   </Button>
@@ -183,16 +183,16 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
+                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9 bg-transparent border-white/50 hover:bg-white/20">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
                       <AvatarFallback>{role.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-background border-border">
+                <DropdownMenuContent align="end" className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="bg-white/20" />
                   <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
@@ -201,7 +201,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                     <MessageSquareQuote className="mr-2 h-4 w-4" />
                     <span>Provide Feedback</span>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="bg-white/20" />
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>

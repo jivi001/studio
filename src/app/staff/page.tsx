@@ -16,11 +16,11 @@ import Link from 'next/link';
 export default function StaffDashboard() {
   return (
     <DashboardLayout role="Staff" title="Staff Dashboard">
-      <div className="p-4 md:p-8">
+      <div className="p-4 md:p-8 text-white">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold">Staff Dashboard</h1>
-            <p className="mt-2 text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
+            <p className="mt-2 text-gray-300">Welcome to your dashboard. Here's your weekly schedule.</p>
           </div>
           <div className="flex items-center gap-2">
             <Link href="https://vetiasportal.vetias.ac.in/IMPRESVCET/" target="_blank" rel="noopener noreferrer">
@@ -32,7 +32,7 @@ export default function StaffDashboard() {
           </div>
         </div>
         
-        <Card>
+        <Card className="bg-white/10 backdrop-blur-lg border border-white/20">
           <CardHeader>
             <CardTitle>My Weekly Timetable</CardTitle>
           </CardHeader>
