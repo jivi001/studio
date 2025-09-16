@@ -24,6 +24,7 @@ const formSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
+type AuthMode = 'signin' | 'signup';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [demoLoading, setDemoLoading] = useState(false);
+  const [authMode, setAuthMode] = useState<AuthMode>('signin');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -105,15 +107,44 @@ export default function LoginPage() {
       console.error('Email sign-in error:', error);
       let description = 'An unexpected error occurred. Please try again.';
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        description = 'Invalid email or password. Please try again or create an account.';
+        description = 'Invalid email or password. Please check your credentials and try again.';
       }
       toast({
-        title: 'Authentication Failed',
+        title: 'Sign In Failed',
         description,
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEmailSignUp = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    try {
+      const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      await handleSuccessfulLogin(result.user);
+    } catch (error: any) {
+      console.error('Email sign-up error:', error);
+      let description = 'An unexpected error occurred. Please try again.';
+      if (error.code === 'auth/email-already-in-use') {
+        description = 'This email is already in use. Please sign in instead.';
+      }
+      toast({
+        title: 'Sign Up Failed',
+        description,
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    if (authMode === 'signin') {
+      handleEmailSignIn(values);
+    } else {
+      handleEmailSignUp(values);
     }
   };
 
@@ -188,12 +219,14 @@ export default function LoginPage() {
       </div>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle>Welcome</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle>{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
+          <CardDescription>
+            {authMode === 'signin' ? 'Sign in to your account to continue' : 'Enter your details to get started'}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleEmailSignIn)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -221,18 +254,27 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Signing in...' : 'Sign in with Email'}
+                {loading ? 'Submitting...' : (authMode === 'signin' ? 'Sign In' : 'Sign Up')}
               </Button>
             </form>
           </Form>
 
-          <div className="relative my-6">
+          <div className="text-center mt-4">
+            <Button
+              variant="link"
+              onClick={() => setAuthMode(authMode === 'signin' ? 'signup' : 'signin')}
+            >
+              {authMode === 'signin' ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+            </Button>
+          </div>
+
+          <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                Or
               </span>
             </div>
           </div>
@@ -258,7 +300,7 @@ export default function LoginPage() {
                       d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 25.4 169.5 67.2l-62.4 62.4c-21.6-20.5-51.5-32.6-86.2-32.6-64.2 0-116.6 54.2-116.6 121.3s52.4 121.3 116.6 121.3c71.3 0 95.8-52.9 98.8-79.1H248v-61.6h236.4c2.4 12.8 3.6 26.4 3.6 41.8z"
                     ></path>
                   </svg>
-                  Sign in with Google
+                  Continue with Google
                 </>
               )}
             </Button>
