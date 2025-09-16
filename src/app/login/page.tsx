@@ -240,7 +240,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
-      <div className="hidden bg-secondary lg:flex lg:flex-col items-center justify-center p-8 text-secondary-foreground">
+      <div className="hidden lg:flex lg:flex-col items-center justify-center p-8 text-foreground">
         <div className="flex items-center gap-4">
             <Logo className="h-12 w-12" />
             <h1 className="text-4xl font-bold tracking-tight">
@@ -251,9 +251,9 @@ export default function LoginPage() {
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-transparent p-4">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md border-none shadow-none bg-transparent">
+          <Card className="w-full max-w-md">
               <CardHeader className="text-center">
               <CardTitle>{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
@@ -309,7 +309,7 @@ export default function LoginPage() {
                   <span className="w-full border-t" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-card px-2 text-muted-foreground">
                       Or
                   </span>
                   </div>
