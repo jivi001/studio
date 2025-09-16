@@ -39,6 +39,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Logo } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
+import { VcetLogo } from './vcet-logo';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -242,6 +243,19 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
           </div>
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
+        <footer className="mt-auto border-t border-white/20 bg-white/5 backdrop-blur-lg">
+          <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 md:px-6 text-foreground">
+            <VcetLogo />
+            <div className="text-center md:text-right mt-4 md:mt-0">
+                <p className="text-sm">
+                © {new Date().getFullYear()} Velalar College of Engineering and Technology. All Rights Reserved.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                Autonomous Institution, Approved by AICTE, New Delhi & Affiliated to Anna University.
+                </p>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
