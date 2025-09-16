@@ -19,17 +19,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useToast } from '@/hooks/use-toast';
+import { sendAlert } from '@/ai/flows/send-alert-flow';
 
 export default function HodDashboard() {
   const { toast } = useToast();
 
-  const handleSendAlert = () => {
-    // In a real app, this would trigger a backend function to send a notification.
-    console.log("Alert sent to Admin and Staff.");
-    toast({
-      title: "Alert Sent",
-      description: "Admin and Staff have been notified.",
-    });
+  const handleSendAlert = async () => {
+    try {
+      const alertMessage = "This is an urgent alert from the HOD.";
+      await sendAlert({ message: alertMessage, targetRoles: ['admin', 'staff'] });
+      
+      toast({
+        title: "Alert Sent",
+        description: "Admin and Staff have been notified.",
+      });
+    } catch (error) {
+      console.error("Failed to send alert:", error);
+      toast({
+        title: "Alert Failed",
+        description: "Could not send the alert. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -52,7 +63,7 @@ export default function HodDashboard() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure you want to send an alert?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action will immediately notify all Staff and Admins. Use this for urgent matters only.
+                    This action will immediately notify all Staff and Admins with a high-priority alert. Use this for urgent matters only.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
