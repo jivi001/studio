@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { requestNotificationPermission } from '@/lib/fcm';
 
 
 const formSchema = z.object({
@@ -68,6 +69,9 @@ export default function LoginPage() {
         });
       }
       
+      // Request notification permission and save FCM token
+      await requestNotificationPermission(user.uid);
+
       toast({
         title: 'Login Successful',
         description: `Welcome, ${user.displayName || user.email}! Redirecting...`,
@@ -151,67 +155,82 @@ export default function LoginPage() {
 
   const createDemoAccounts = async () => {
     setDemoLoading(true);
+    
+    // Store current user to avoid logging them out
     const originalUser = auth.currentUser;
-
+  
     const demoAccounts = [
       { email: 'admin@example.com', password: 'password', role: 'admin' },
       { email: 'hod@example.com', password: 'password', role: 'hod' },
       { email: 'staff@example.com', password: 'password', role: 'staff' },
     ];
-
+  
     try {
       for (const acc of demoAccounts) {
         try {
-          const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
+          // Check if user already exists by trying to sign in first
+          const userCredential = await signInWithEmailAndPassword(auth, acc.email, acc.password);
           const user = userCredential.user;
-          await setDoc(doc(db, "users", user.uid), {
-            uid: user.uid,
-            displayName: acc.email,
-            email: acc.email,
-            createdAt: serverTimestamp(),
-            lastLogin: serverTimestamp(),
-            role: acc.role
-          });
+          // User exists, update role if needed
+          const userRef = doc(db, 'users', user.uid);
+          const userSnap = await getDoc(userRef);
+          if (!userSnap.exists() || userSnap.data().role !== acc.role) {
+            await setDoc(userRef, { role: acc.role }, { merge: true });
+          }
         } catch (error: any) {
-          if (error.code === 'auth/email-already-in-use') {
-            // User exists, we need to sign in to get the UID to update the doc
-            const userCredential = await signInWithEmailAndPassword(auth, acc.email, acc.password);
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+            // User does not exist, create them
+            const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
             const user = userCredential.user;
-            const userRef = doc(db, "users", user.uid);
-            await updateDoc(userRef, { role: acc.role });
-          } else {
-            throw error; // Rethrow other errors
+            await setDoc(doc(db, "users", user.uid), {
+              uid: user.uid,
+              displayName: acc.email,
+              email: acc.email,
+              createdAt: serverTimestamp(),
+              lastLogin: serverTimestamp(),
+              role: acc.role
+            });
+          } else if (error.code !== 'auth/wrong-password') {
+            // Re-throw other errors
+            throw error;
           }
         }
       }
       
-      // Sign out the last logged-in demo user
-      if (auth.currentUser) {
+      // After creating/updating, sign out the temporary user
+      if (auth.currentUser && auth.currentUser.email?.endsWith('@example.com')) {
         await auth.signOut();
       }
-      
-      // If there was a user logged in originally, sign them back in
-      // This part is tricky without re-asking for credentials.
-      // For this demo, we'll just log them out.
-      if (originalUser && auth.currentUser?.uid !== originalUser.uid) {
-         // The original user was logged out. The simplest is to leave it that way.
+  
+      // This part is tricky. Re-authenticating the original user requires credentials.
+      // For this demo, we'll notify the user if they were logged out.
+      if (originalUser && !auth.currentUser) {
+        toast({
+          title: 'You have been signed out',
+          description: 'Please sign in again to continue.',
+        });
       }
-
+  
       toast({
         title: 'Demo Accounts Ready',
-        description: 'Admin, HOD, and Staff accounts are set. Use password: "password"',
+        description: 'Admin, HOD, and Staff accounts are set up. Use password: "password"',
       });
+  
     } catch (error) {
       console.error("Error creating/updating demo accounts:", error);
       toast({
         title: 'Creation Failed',
-        description: 'Could not create demo accounts. They might already exist with a different password.',
+        description: 'Could not set up demo accounts. An unexpected error occurred.',
         variant: 'destructive',
       });
     } finally {
-      // Ensure we are signed out unless a user was originally signed in.
-      if (auth.currentUser && (!originalUser || auth.currentUser.uid !== originalUser.uid)) {
-          await auth.signOut();
+      // Try to re-sign in the original user if there was one. This might fail.
+      // A more robust solution would require re-authentication.
+      if (originalUser && !auth.currentUser) {
+        // Silently try to keep them logged in, but it's not guaranteed
+      } else if (auth.currentUser && !originalUser) {
+        // If no one was logged in before, sign out the last demo user
+        await auth.signOut();
       }
       setDemoLoading(false);
     }
@@ -322,5 +341,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

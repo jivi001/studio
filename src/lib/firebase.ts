@@ -4,6 +4,7 @@
 import { initializeApp, getApp, getApps } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3xcXvM_M8mGIcFh6MTFiCxbZFizjyvqo",
@@ -20,4 +21,10 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+// Initialize Firebase Cloud Messaging and get a reference to the service
+let messaging;
+if (typeof window !== 'undefined') {
+  messaging = getMessaging(app);
+}
+
+export { app, auth, db, messaging, getToken, onMessage };
