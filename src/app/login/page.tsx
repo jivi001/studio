@@ -361,8 +361,16 @@ export default function LoginPage() {
           </Card>
         </div>
         <footer className="w-full border-t border-white/20 py-4">
-          <div className="container mx-auto flex items-center justify-center text-foreground">
-              <VcetLogo />
+          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-foreground">
+            <VcetLogo />
+            <div className="text-center">
+                <p className="text-sm font-semibold">
+                © {new Date().getFullYear()} Velalar College of Engineering and Technology. All Rights Reserved.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                Autonomous Institution, Approved by AICTE, New Delhi & Affiliated to Anna University.
+                </p>
+            </div>
           </div>
         </footer>
       </div>

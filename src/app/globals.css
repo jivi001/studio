@@ -13,7 +13,7 @@ body {
     --foreground: 222.2 47.4% 11.2%;
     --card: 0 0% 100% / 0.1;
     --card-foreground: 222.2 47.4% 11.2%;
-    --popover: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100% / 0.1;
     --popover-foreground: 222.2 47.4% 11.2%;
     --primary: 36 100% 60%; /* Saffron/Orange */
     --primary-foreground: 222.2 47.4% 11.2%;
