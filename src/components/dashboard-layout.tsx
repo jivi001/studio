@@ -135,110 +135,110 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <h1 className="text-xl font-bold tracking-tight text-foreground">
               Attendance Monitor
             </h1>
-          </div>
-          <div className="relative ml-auto flex-1 md:grow-0">
             <Badge variant="outline" className="text-sm">
               {role}
             </Badge>
           </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <div className="relative">
-                <Button variant="outline" size="icon" className="h-9 w-9">
-                    <Bell className="h-4 w-4" />
-                    <span className="sr-only">Toggle notifications</span>
-                </Button>
-                {notificationCount > 0 && (
-                  <Badge variant="destructive" className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
-                    {notificationCount}
-                  </Badge>
-                )}
-              </div>
-            </SheetTrigger>
-            <SheetContent>
-                <SheetHeader>
-                    <SheetTitle>Notifications</SheetTitle>
-                    <SheetDescription>
-                        {notifications.length > 0 ? `You have ${notificationCount} unread messages.` : 'You have no new notifications.'}
-                    </SheetDescription>
-                </SheetHeader>
-                <div className="mt-4 space-y-4">
-                  {notifications.length > 0 ? (
-                      notifications.map(notif => (
-                        <div key={notif.id} className="p-3 rounded-lg border bg-card text-card-foreground flex justify-between items-start gap-2">
-                              <div className="flex flex-col">
-                                  <p className="font-medium">{notif.title}</p>
-                                  <p className="text-xs text-muted-foreground">{notif.body}</p>
-                              </div>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => clearNotification(notif.id)}>
-                                <X className='h-4 w-4'/>
-                              </Button>
-                          </div>
-                      ))
-                  ) : (
-                      <p className="text-sm text-muted-foreground text-center py-8">All caught up!</p>
+          <div className="relative ml-auto flex items-center gap-2 md:grow-0">
+            <Sheet>
+              <SheetTrigger asChild>
+                <div className="relative">
+                  <Button variant="outline" size="icon" className="h-9 w-9">
+                      <Bell className="h-4 w-4" />
+                      <span className="sr-only">Toggle notifications</span>
+                  </Button>
+                  {notificationCount > 0 && (
+                    <Badge variant="destructive" className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
+                      {notificationCount}
+                    </Badge>
                   )}
                 </div>
-            </SheetContent>
-          </Sheet>
-          <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
-                    <AvatarFallback>{role.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setIsFeedbackDialogOpen(true)}>
-                  <MessageSquareQuote className="mr-2 h-4 w-4" />
-                  <span>Provide Feedback</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Provide Feedback</DialogTitle>
-                <DialogDescription>
-                  We value your feedback. Please let us know your thoughts, suggestions, or any issues you've encountered.
-                </DialogDescription>
-              </Header>
-              <div className="grid gap-4 py-4">
-                <div className="grid w-full gap-2">
-                  <Label htmlFor="feedback-message">Your Feedback</Label>
-                  <Textarea 
-                    id="feedback-message"
-                    placeholder="Type your message here..." 
-                    rows={6}
-                    value={feedback}
-                    onChange={(e) => setFeedback(e.target.value)}
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                    Cancel
+              </SheetTrigger>
+              <SheetContent>
+                  <SheetHeader>
+                      <SheetTitle>Notifications</SheetTitle>
+                      <SheetDescription>
+                          {notifications.length > 0 ? `You have ${notificationCount} unread messages.` : 'You have no new notifications.'}
+                      </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-4 space-y-4">
+                    {notifications.length > 0 ? (
+                        notifications.map(notif => (
+                          <div key={notif.id} className="p-3 rounded-lg border bg-card text-card-foreground flex justify-between items-start gap-2">
+                                <div className="flex flex-col">
+                                    <p className="font-medium">{notif.title}</p>
+                                    <p className="text-xs text-muted-foreground">{notif.body}</p>
+                                </div>
+                                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => clearNotification(notif.id)}>
+                                  <X className='h-4 w-4'/>
+                                </Button>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-sm text-muted-foreground text-center py-8">All caught up!</p>
+                    )}
+                  </div>
+              </SheetContent>
+            </Sheet>
+            <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
+                      <AvatarFallback>{role.charAt(0)}</AvatarFallback>
+                    </Avatar>
                   </Button>
-                </DialogClose>
-                <Button type="button" onClick={handleFeedbackSubmit}>Submit</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-background border-border">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setIsFeedbackDialogOpen(true)}>
+                    <MessageSquareQuote className="mr-2 h-4 w-4" />
+                    <span>Provide Feedback</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Provide Feedback</DialogTitle>
+                  <DialogDescription>
+                    We value your feedback. Please let us know your thoughts, suggestions, or any issues you've encountered.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid w-full gap-2">
+                    <Label htmlFor="feedback-message">Your Feedback</Label>
+                    <Textarea 
+                      id="feedback-message"
+                      placeholder="Type your message here..." 
+                      rows={6}
+                      value={feedback}
+                      onChange={(e) => setFeedback(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button type="button" variant="secondary">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button type="button" onClick={handleFeedbackSubmit}>Submit</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </header>
         <main className="flex-1">{children}</main>
       </div>
