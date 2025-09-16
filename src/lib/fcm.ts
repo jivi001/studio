@@ -8,7 +8,7 @@ import { db, messaging, getToken } from './firebase';
 // IMPORTANT! You MUST replace this placeholder with the key from your Firebase project.
 // Go to Project Settings -> Cloud Messaging -> Web configuration.
 // Click "Generate key pair" and copy the public key here.
-const VAPID_KEY = 'YOUR_VAPID_KEY_FROM_FIREBASE_CONSOLE';
+const VAPID_KEY = 'BKFRTQjr4LqWEwFuT0TFJPO-NVmsiQW-7mDACzdU79bCzX2EVT1K5NE0w_8wY1VFPZ_jSYF3OBwTTAIeV5oIAdY';
 // =================================================================================================
 
 
