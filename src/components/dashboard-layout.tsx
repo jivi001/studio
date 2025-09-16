@@ -40,6 +40,7 @@ import { Logo } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { VcetLogo } from './vcet-logo';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -58,6 +59,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
   ]);
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const { userAvatar } = placeholderImages;
 
 
   useEffect(() => {
@@ -186,7 +188,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9 bg-transparent hover:bg-white/20 border-foreground/30">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
+                      <AvatarImage src={userAvatar.src} alt={userAvatar.alt} data-ai-hint={userAvatar.hint} />
                       <AvatarFallback>{role.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </Button>

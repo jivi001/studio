@@ -1,17 +1,19 @@
 import { Button } from "./ui/button";
 import Image from 'next/image';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 export function EmptyState() {
+  const { emptyState } = placeholderImages;
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed bg-card p-12 text-center">
       <div className="mb-4 rounded-full bg-primary/10 p-4">
         <Image
-            src="https://picsum.photos/128/128"
-            alt="Illustration of a person checking a list"
-            width={128}
-            height={128}
+            src={emptyState.src}
+            alt={emptyState.alt}
+            width={emptyState.width}
+            height={emptyState.height}
             className="rounded-full"
-            data-ai-hint="illustration person list"
+            data-ai-hint={emptyState.hint}
         />
       </div>
       <h3 className="text-xl font-semibold tracking-tight">You're all clear!</h3>
