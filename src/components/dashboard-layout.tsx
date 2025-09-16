@@ -19,6 +19,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetDescription
+} from '@/components/ui/sheet';
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -133,8 +141,8 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
               {role}
             </Badge>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <Sheet>
+            <SheetTrigger asChild>
               <div className="relative">
                 <Button variant="outline" size="icon" className="h-8 w-8">
                     <Bell className="h-4 w-4" />
@@ -146,26 +154,33 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   </Badge>
                 )}
               </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {notifications.length > 0 ? (
-                  notifications.map(notif => (
-                      <DropdownMenuItem key={notif.id} onSelect={() => clearNotification(notif.id)}>
-                          <div className="flex flex-col">
-                              <p className="font-medium">{notif.title}</p>
-                              <p className="text-xs text-muted-foreground">{notif.body}</p>
+            </SheetTrigger>
+            <SheetContent>
+                <SheetHeader>
+                    <SheetTitle>Notifications</SheetTitle>
+                    <SheetDescription>
+                        {notifications.length > 0 ? `You have ${notificationCount} unread messages.` : 'You have no new notifications.'}
+                    </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  {notifications.length > 0 ? (
+                      notifications.map(notif => (
+                        <div key={notif.id} className="p-3 rounded-lg border bg-card/50 text-card-foreground flex justify-between items-start">
+                              <div className="flex flex-col">
+                                  <p className="font-medium">{notif.title}</p>
+                                  <p className="text-xs text-muted-foreground">{notif.body}</p>
+                              </div>
+                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => clearNotification(notif.id)}>
+                                <LogOut className='h-4 w-4'/>
+                              </Button>
                           </div>
-                      </DropdownMenuItem>
-                  ))
-              ) : (
-                  <DropdownMenuItem disabled>
-                      <p className="text-xs text-muted-foreground">No new notifications</p>
-                  </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                      ))
+                  ) : (
+                      <p className="text-sm text-muted-foreground text-center py-8">All caught up!</p>
+                  )}
+                </div>
+            </SheetContent>
+          </Sheet>
           <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
