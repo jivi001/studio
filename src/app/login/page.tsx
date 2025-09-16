@@ -69,13 +69,13 @@ export default function LoginPage() {
         });
       }
       
-      // Request notification permission and save FCM token
-      await requestNotificationPermission(user.uid);
-
       toast({
         title: 'Login Successful',
-        description: `Welcome, ${user.displayName || user.email}! Redirecting...`,
+        description: `Welcome! Requesting notification permissions...`,
       });
+
+      // Request notification permission and save FCM token
+      await requestNotificationPermission(user.uid);
 
       router.push(`/${role}`);
     } else {

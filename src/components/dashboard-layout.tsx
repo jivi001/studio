@@ -1,9 +1,11 @@
 // src/components/dashboard-layout.tsx
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, User, Bell } from 'lucide-react';
+import { onMessage, messaging } from '@/lib/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -25,12 +27,55 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [notificationCount, setNotificationCount] = useState(3);
+  const [notifications, setNotifications] = useState([
+      { id: 1, title: 'New Leave Request', body: 'John Doe submitted a leave request.' },
+      { id: 2, title: 'Attendance Alert', body: 'Jane Smith marked absent.' },
+      { id: 3, title: 'System Update', body: 'Scheduled maintenance at midnight.' },
+  ]);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+        if (!messaging) return;
+        const unsubscribe = onMessage(messaging, (payload) => {
+            console.log('Foreground message received.', payload);
+            
+            const { notification } = payload;
+            
+            // Add to our notifications list
+            const newNotification = {
+              id: Date.now(), // simple unique id
+              title: notification?.title || 'New Message',
+              body: notification?.body || 'You have a new message.',
+            };
+            
+            setNotifications(prev => [newNotification, ...prev]);
+            setNotificationCount(prev => prev + 1);
+
+            // Show a toast
+            toast({
+                title: notification?.title,
+                description: notification?.body,
+            });
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }
+  }, [toast]);
+
 
   const handleLogout = () => {
     // In a real app, you would sign out from Firebase here
     router.push('/login');
   };
+  
+  const clearNotification = (id: number) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotificationCount(c => Math.max(0, c - 1));
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -63,24 +108,20 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
           <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
-              <div className="flex flex-col">
-                <p className="font-medium">New Leave Request</p>
-                <p className="text-xs text-muted-foreground">John Doe submitted a leave request.</p>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
-              <div className="flex flex-col">
-                <p className="font-medium">Attendance Alert</p>
-                <p className="text-xs text-muted-foreground">Jane Smith marked absent.</p>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
-              <div className="flex flex-col">
-                <p className="font-medium">System Update</p>
-                <p className="text-xs text-muted-foreground">Scheduled maintenance at midnight.</p>
-              </div>
-            </DropdownMenuItem>
+            {notifications.length > 0 ? (
+                notifications.map(notif => (
+                    <DropdownMenuItem key={notif.id} onSelect={() => clearNotification(notif.id)}>
+                        <div className="flex flex-col">
+                            <p className="font-medium">{notif.title}</p>
+                            <p className="text-xs text-muted-foreground">{notif.body}</p>
+                        </div>
+                    </DropdownMenuItem>
+                ))
+            ) : (
+                <DropdownMenuItem disabled>
+                    <p className="text-xs text-muted-foreground">No new notifications</p>
+                </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>
