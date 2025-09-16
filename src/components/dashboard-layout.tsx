@@ -46,17 +46,43 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
             {role}
           </Badge>
         </div>
-        <div className="relative">
-          <Button variant="outline" size="icon" className="h-8 w-8">
-              <Bell className="h-4 w-4" />
-              <span className="sr-only">Toggle notifications</span>
-          </Button>
-          {notificationCount > 0 && (
-            <Badge variant="destructive" className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
-              {notificationCount}
-            </Badge>
-          )}
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="relative">
+              <Button variant="outline" size="icon" className="h-8 w-8">
+                  <Bell className="h-4 w-4" />
+                  <span className="sr-only">Toggle notifications</span>
+              </Button>
+              {notificationCount > 0 && (
+                <Badge variant="destructive" className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
+                  {notificationCount}
+                </Badge>
+              )}
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
+              <div className="flex flex-col">
+                <p className="font-medium">New Leave Request</p>
+                <p className="text-xs text-muted-foreground">John Doe submitted a leave request.</p>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
+              <div className="flex flex-col">
+                <p className="font-medium">Attendance Alert</p>
+                <p className="text-xs text-muted-foreground">Jane Smith marked absent.</p>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
+              <div className="flex flex-col">
+                <p className="font-medium">System Update</p>
+                <p className="text-xs text-muted-foreground">Scheduled maintenance at midnight.</p>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
