@@ -58,8 +58,8 @@ export default function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <p className="mt-2 text-muted-foreground">Welcome to the admin control panel.</p>
+            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+            <p className="mt-2 text-lg text-muted-foreground">Welcome to the admin control panel.</p>
           </div>
           <div className="flex items-center gap-2">
             <AlertDialog>
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         
-        <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
+        <Card>
           <CardHeader>
             <CardTitle>Weekly Timetable</CardTitle>
           </CardHeader>

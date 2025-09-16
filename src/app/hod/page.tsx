@@ -57,8 +57,8 @@ export default function HodDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">HOD Dashboard</h1>
-            <p className="mt-2 text-muted-foreground">Welcome to the Head of Department dashboard.</p>
+            <h1 className="text-3xl font-bold tracking-tight">HOD Dashboard</h1>
+            <p className="mt-2 text-lg text-muted-foreground">Welcome to the Head of Department dashboard.</p>
           </div>
           <div className="flex items-center gap-2">
             <AlertDialog>
@@ -90,7 +90,7 @@ export default function HodDashboard() {
           </div>
         </div>
         
-        <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
+        <Card>
           <CardHeader>
             <CardTitle>Weekly Timetable</CardTitle>
           </CardHeader>

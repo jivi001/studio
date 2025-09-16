@@ -255,7 +255,7 @@ export default function LoginPage() {
             Attendance Monitor
             </h1>
         </div>
-        <p className="mt-4 text-center text-lg text-foreground/80">
+        <p className="mt-4 text-center text-xl text-foreground/80 font-medium">
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
@@ -360,7 +360,7 @@ export default function LoginPage() {
               </CardContent>
           </Card>
         </div>
-        <footer className="w-full border-t py-4 mt-auto">
+        <footer className="w-full border-t border-white/20 py-4 mt-auto">
           <div className="container mx-auto flex items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
           </div>

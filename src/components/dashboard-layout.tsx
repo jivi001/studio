@@ -132,7 +132,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         <title>{title}</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-background/80 px-4 backdrop-blur-xl sm:px-6">
           <div className="flex items-center gap-3">
              <Image 
                 src={headerLogo.src}
@@ -142,7 +142,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 data-ai-hint={headerLogo.hint}
                 className="h-8 w-auto"
               />
-            <h1 className="text-xl font-bold tracking-tight">
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
               Attendance Monitor
             </h1>
             <Badge variant="outline" className="text-sm border-primary/50 text-primary bg-primary/20">
@@ -252,11 +252,11 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
           </div>
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
-        <footer className="mt-auto border-t py-4">
+        <footer className="mt-auto border-t border-white/20 py-4">
           <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
             <div className="text-center">
-                <p className="text-sm font-semibold">
+                <p className="text-sm font-semibold text-foreground">
                 © {new Date().getFullYear()} Velalar College of Engineering and Technology. All Rights Reserved.
                 </p>
                 <p className="text-xs text-muted-foreground">

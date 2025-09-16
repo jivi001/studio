@@ -19,8 +19,8 @@ export default function StaffDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Staff Dashboard</h1>
-            <p className="mt-2 text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
+            <h1 className="text-3xl font-bold tracking-tight">Staff Dashboard</h1>
+            <p className="mt-2 text-lg text-muted-foreground">Welcome to your dashboard. Here's your weekly schedule.</p>
           </div>
           <div className="flex items-center gap-2">
             <Link href="https://vetiasportal.vetias.ac.in/IMPRESVCET/" target="_blank" rel="noopener noreferrer">
@@ -32,7 +32,7 @@ export default function StaffDashboard() {
           </div>
         </div>
         
-        <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
+        <Card>
           <CardHeader>
             <CardTitle>My Weekly Timetable</CardTitle>
           </CardHeader>
