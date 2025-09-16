@@ -4,7 +4,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Head from 'next/head';
-import { LogOut, User, Bell } from 'lucide-react';
+import { LogOut, User, Bell, MessageSquareQuote } from 'lucide-react';
 import { onMessage, messaging } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,8 +18,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { Logo } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -36,6 +47,9 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
       { id: 2, title: 'Attendance Alert', body: 'Jane Smith marked absent.' },
       { id: 3, title: 'System Update', body: 'Scheduled maintenance at midnight.' },
   ]);
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
+  const [feedback, setFeedback] = useState('');
+
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -78,6 +92,28 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
     setNotifications(prev => prev.filter(n => n.id !== id));
     setNotificationCount(c => Math.max(0, c - 1));
   }
+
+  const handleFeedbackSubmit = () => {
+    if (feedback.trim()) {
+      console.log('--- User Feedback ---');
+      console.log(feedback);
+      console.log('---------------------');
+      
+      toast({
+        title: 'Feedback Sent',
+        description: "Thank you! We've received your feedback.",
+      });
+
+      setFeedback(''); // Clear textarea
+      setIsFeedbackDialogOpen(false); // Close dialog
+    } else {
+      toast({
+        title: 'Feedback Empty',
+        description: "Please enter your feedback before submitting.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -130,29 +166,64 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
-                  <AvatarFallback>{role.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Logout</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src="https://picsum.photos/100/100" alt="User Avatar" data-ai-hint="person face" />
+                    <AvatarFallback>{role.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setIsFeedbackDialogOpen(true)}>
+                  <MessageSquareQuote className="mr-2 h-4 w-4" />
+                  <span>Provide Feedback</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Provide Feedback</DialogTitle>
+                <DialogDescription>
+                  We value your feedback. Please let us know your thoughts, suggestions, or any issues you've encountered.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid w-full gap-2">
+                  <Label htmlFor="feedback-message">Your Feedback</Label>
+                  <Textarea 
+                    id="feedback-message"
+                    placeholder="Type your message here..." 
+                    rows={6}
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button type="button" onClick={handleFeedbackSubmit}>Submit</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </header>
         <main className="flex-1 p-4 sm:px-6 sm:py-0">{children}</main>
       </div>
