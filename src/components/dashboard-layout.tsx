@@ -33,8 +33,8 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-white/10 px-4 backdrop-blur-lg sm:px-6">
         <div className="flex items-center gap-3">
            <Logo className="h-7 w-7 text-primary" />
           <h1 className="text-xl font-bold tracking-tight text-foreground">
@@ -42,7 +42,7 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
           </h1>
         </div>
         <div className="relative ml-auto flex-1 md:grow-0">
-          <Badge variant="outline" className="text-sm">
+          <Badge variant="outline" className="text-sm border-white/30">
             {role}
           </Badge>
         </div>
@@ -60,7 +60,7 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
               )}
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={() => setNotificationCount(c => Math.max(0, c - 1))}>
@@ -92,7 +92,7 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-lg border-white/20">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
