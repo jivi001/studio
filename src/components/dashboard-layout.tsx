@@ -1,7 +1,7 @@
 // src/components/dashboard-layout.tsx
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, User, Bell } from 'lucide-react';
 
@@ -25,6 +25,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, role }: DashboardLayoutProps) {
   const router = useRouter();
+  const [notificationCount, setNotificationCount] = useState(3);
 
   const handleLogout = () => {
     // In a real app, you would sign out from Firebase here
@@ -45,10 +46,17 @@ export function DashboardLayout({ children, role }: DashboardLayoutProps) {
             {role}
           </Badge>
         </div>
-        <Button variant="outline" size="icon" className="h-8 w-8">
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">Toggle notifications</span>
-        </Button>
+        <div className="relative">
+          <Button variant="outline" size="icon" className="h-8 w-8">
+              <Bell className="h-4 w-4" />
+              <span className="sr-only">Toggle notifications</span>
+          </Button>
+          {notificationCount > 0 && (
+            <Badge variant="destructive" className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full p-0">
+              {notificationCount}
+            </Badge>
+          )}
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9">
