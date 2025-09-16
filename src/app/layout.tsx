@@ -27,6 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0A102A" />
       </head>
       <body
         className={cn(
