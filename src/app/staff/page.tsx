@@ -32,7 +32,7 @@ export default function StaffDashboard() {
           </div>
         </div>
         
-        <Card>
+        <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
           <CardHeader>
             <CardTitle>My Weekly Timetable</CardTitle>
           </CardHeader>
