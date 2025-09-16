@@ -124,7 +124,8 @@ export default function LoginPage() {
     try {
       const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
       await handleSuccessfulLogin(result.user);
-    } catch (error: any) {
+    } catch (error: any)
+{
       console.error('Email sign-up error:', error);
       let description = 'An unexpected error occurred. Please try again.';
       if (error.code === 'auth/email-already-in-use') {
@@ -150,10 +151,7 @@ export default function LoginPage() {
 
   const createDemoAccounts = async () => {
     setDemoLoading(true);
-    // It's good practice to sign out before creating accounts
-    if (auth.currentUser) {
-        await auth.signOut();
-    }
+    const originalUser = auth.currentUser;
 
     const demoAccounts = [
       { email: 'admin@example.com', password: 'password', role: 'admin' },
@@ -164,7 +162,6 @@ export default function LoginPage() {
     try {
       for (const acc of demoAccounts) {
         try {
-          // Attempt to create the user. If they already exist, this will fail.
           const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
           const user = userCredential.user;
           await setDoc(doc(db, "users", user.uid), {
@@ -177,33 +174,45 @@ export default function LoginPage() {
           });
         } catch (error: any) {
           if (error.code === 'auth/email-already-in-use') {
-            // User already exists, sign in to get UID and update role if needed.
+            // User exists, we need to sign in to get the UID to update the doc
             const userCredential = await signInWithEmailAndPassword(auth, acc.email, acc.password);
             const user = userCredential.user;
             const userRef = doc(db, "users", user.uid);
-            await setDoc(userRef, { role: acc.role }, { merge: true });
+            await updateDoc(userRef, { role: acc.role });
           } else {
-            // Another error occurred during creation
-            throw error;
+            throw error; // Rethrow other errors
           }
         }
-         // Sign out after each operation to ensure a clean state
-        if (auth.currentUser) {
-            await auth.signOut();
-        }
       }
+      
+      // Sign out the last logged-in demo user
+      if (auth.currentUser) {
+        await auth.signOut();
+      }
+      
+      // If there was a user logged in originally, sign them back in
+      // This part is tricky without re-asking for credentials.
+      // For this demo, we'll just log them out.
+      if (originalUser && auth.currentUser?.uid !== originalUser.uid) {
+         // The original user was logged out. The simplest is to leave it that way.
+      }
+
       toast({
         title: 'Demo Accounts Ready',
-        description: 'Admin, HOD, and Staff accounts are ready. Use password: "password"',
+        description: 'Admin, HOD, and Staff accounts are set. Use password: "password"',
       });
     } catch (error) {
       console.error("Error creating/updating demo accounts:", error);
       toast({
         title: 'Creation Failed',
-        description: 'Could not create demo accounts. Check the console for errors.',
+        description: 'Could not create demo accounts. They might already exist with a different password.',
         variant: 'destructive',
       });
     } finally {
+      // Ensure we are signed out unless a user was originally signed in.
+      if (auth.currentUser && (!originalUser || auth.currentUser.uid !== originalUser.uid)) {
+          await auth.signOut();
+      }
       setDemoLoading(false);
     }
   };
@@ -313,3 +322,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
