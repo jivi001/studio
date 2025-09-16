@@ -27,7 +27,19 @@ const nextConfig: NextConfig = {
         hostname: 'www.velalarengg.ac.in',
         port: '',
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.vercel.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

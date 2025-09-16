@@ -2,71 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 1. Define your color palette and core variables */
+:root {
+  --background-dark: #0A0A14; /* Midnight Blue */
+  --accent-luminous: #00F2DE;   /* Luminous Teal */
+  --text-primary: #F0F0F5;
+  --text-secondary: #A0A0B2;
+  --glass-border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg-color: rgba(18, 18, 30, 0.6);
+}
+
+/* 2. Style the main body with the animated background */
 body {
-  background: radial-gradient(circle, hsl(36 100% 60% / 0.1), hsl(210 100% 20% / 0.2));
+  color: var(--text-primary);
+  background: var(--background-dark);
+  overflow: hidden; /* Hide scrollbars from the main background */
 }
 
-@layer base {
-  :root {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 0 0% 0%;
-    --card: 0 0% 100% / 0.1;
-    --card-foreground: 0 0% 0%;
-    --popover: 0 0% 100% / 0.1;
-    --popover-foreground: 0 0% 0%;
-    --primary: 36 100% 60%; /* Saffron/Orange */
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 210 100% 20%; /* Deep Blue */
-    --secondary-foreground: 0 0% 0%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 22.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 36 100% 60%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 222.2 47.4% 11.2%;
-    --foreground: 0 0% 0%;
-    --card: 222.2 47.4% 11.2%;
-    --card-foreground: 0 0% 0%;
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 0 0% 0%;
-    --primary: 36 100% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 210 100% 20%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 36 100% 60%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+/* 3. Create the animated, abstract background effect */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, var(--accent-luminous), transparent 30%),
+    radial-gradient(circle at 80% 70%, #E422F5, transparent 30%);
+  filter: blur(100px);
+  opacity: 0.2;
+  animation: float 20s infinite ease-in-out;
+  z-index: -1;
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -40px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* 4. Define a utility class for the glass effect */
+@layer components {
+  .glass-panel {
+    background: var(--glass-bg-color);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px); /* For Safari */
+    border: 1px solid var(--glass-border-color);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 1rem; /* 16px */
+    padding: 2rem;
+    transition: all 0.3s ease;
   }
-  body {
-    @apply bg-background text-foreground;
+  .glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.25);
   }
 }
