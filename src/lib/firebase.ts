@@ -6,12 +6,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "TODO: your api key",
-  authDomain: "TODO: your auth domain",
-  projectId: "TODO: your project id",
-  storageBucket: "TODO: your storage bucket",
-  messagingSenderId: "TODO: your messaging sender id",
-  appId: "TODO: your app id"
+  apiKey: "AIzaSyD3xcXvM_M8mGIcFh6MTFiCxbZFizjyvqo",
+  authDomain: "studio-2162039320-2fe37.firebaseapp.com",
+  projectId: "studio-2162039320-2fe37",
+  storageBucket: "studio-2162039320-2fe37.firebasestorage.app",
+  messagingSenderId: "73384650168",
+  appId: "1:73384650168:web:a0f4e8472d82dc9b669b4d"
 };
 
 
