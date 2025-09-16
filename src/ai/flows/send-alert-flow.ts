@@ -30,12 +30,27 @@ const sendAlertFlow = ai.defineFlow(
     outputSchema: z.object({ success: z.boolean() }),
   },
   async (input) => {
-    console.log(`Simulating sending alert: "${input.message}" to roles: ${input.targetRoles.join(', ')}`);
-
-    // THIS IS A SIMULATION.
-    // In a real Firebase project, you would implement the logic below in a Firebase Function.
+    // THIS IS A PLACEHOLDER.
+    // For this to work, you must create a real Firebase Function.
+    // This flow represents the front-end call to that function.
     
-    // 1. Query Firestore for users with the target roles.
+    console.error(`****************************************************************`);
+    console.error(`* ERROR: sendAlertFlow is not implemented.                     *`);
+    console.error(`* You must create and deploy a Firebase Function to send alerts. *`);
+    console.error(`****************************************************************`);
+
+    // In a real project, you would replace this error with a call
+    // to your deployed Firebase Function, for example:
+    // const functions = getFunctions(app, 'region');
+    // const sendHighPriorityAlert = httpsCallable(functions, 'sendHighPriorityAlert');
+    // await sendHighPriorityAlert({ message: input.message, targetRoles: input.targetRoles });
+
+    throw new Error(`Backend function 'sendHighPriorityAlert' is not implemented. Please check server logs and Firebase Function setup.`);
+
+    // The logic below is what you would implement in your Firebase Function
+    // using the Firebase Admin SDK.
+
+    // // 1. Query Firestore for users with the target roles.
     // const usersSnapshot = await firestore().collection('users').where('role', 'in', input.targetRoles).get();
     // const tokens = usersSnapshot.docs.map(doc => doc.data().fcmToken).filter(token => !!token);
 
@@ -44,7 +59,7 @@ const sendAlertFlow = ai.defineFlow(
     //   return { success: false };
     // }
 
-    // 2. Construct the high-priority FCM message payload.
+    // // 2. Construct the high-priority FCM message payload.
     // const messagePayload = {
     //   tokens: tokens,
     //   notification: {
@@ -56,13 +71,6 @@ const sendAlertFlow = ai.defineFlow(
     //     notification: {
     //       sound: 'default',
     //       channel_id: 'urgent_alerts', // You must create this channel on the client.
-    //       // The following are device-dependent and may not always work
-    //       vibration_pattern: '1s 0.5s 1s',
-    //       light_settings: {
-    //         color: '#FF0000',
-    //         light_on_duration: '1s',
-    //         light_off_duration: '1s'
-    //       }
     //     },
     //   },
     //   apns: { // iOS configuration
@@ -79,7 +87,7 @@ const sendAlertFlow = ai.defineFlow(
     //   },
     // };
 
-    // 3. Send the message using the Firebase Admin SDK.
+    // // 3. Send the message using the Firebase Admin SDK.
     // try {
     //   const response = await getMessaging().sendMulticast(messagePayload);
     //   console.log('Successfully sent message:', response);
@@ -90,8 +98,7 @@ const sendAlertFlow = ai.defineFlow(
     //   console.error('Error sending message:', error);
     //   throw new Error('Failed to send FCM message.');
     // }
-
-    // For this simulation, we'll just return success.
-    return { success: true };
+    
+    // return { success: true };
   }
 );
