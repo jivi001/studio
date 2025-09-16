@@ -132,7 +132,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         <title>{title}</title>
       </Head>
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white/10 px-4 backdrop-blur-lg sm:px-6 border-white/20">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-xl sm:px-6">
           <div className="flex items-center gap-3">
              <Image 
                 src={headerLogo.src}
@@ -164,7 +164,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   )}
                 </div>
               </SheetTrigger>
-              <SheetContent className="bg-white/10 backdrop-blur-lg border-white/20">
+              <SheetContent className="bg-background/80 backdrop-blur-xl">
                   <SheetHeader>
                       <SheetTitle>Notifications</SheetTitle>
                       <SheetDescription>
@@ -174,7 +174,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   <div className="mt-4 space-y-4">
                     {notifications.length > 0 ? (
                         notifications.map(notif => (
-                          <div key={notif.id} className="p-3 rounded-lg border bg-card/80 text-card-foreground flex justify-between items-start gap-2 bg-white/10 backdrop-blur-lg border-white/20 shadow-lg">
+                          <div key={notif.id} className="p-3 rounded-lg border bg-card/80 text-card-foreground flex justify-between items-start gap-2">
                                 <div className="flex flex-col">
                                     <p className="font-medium">{notif.title}</p>
                                     <p className="text-xs text-muted-foreground">{notif.body}</p>
@@ -200,7 +200,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white/10 backdrop-blur-lg border-white/20">
+                <DropdownMenuContent align="end" className="bg-background/80 backdrop-blur-xl">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
@@ -252,8 +252,8 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
           </div>
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
-        <footer className="mt-auto border-t border-white/20 bg-white/5 backdrop-blur-lg">
-          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-foreground">
+        <footer className="mt-auto border-t py-4">
+          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
             <div className="text-center">
                 <p className="text-sm font-semibold">

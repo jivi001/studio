@@ -259,9 +259,9 @@ export default function LoginPage() {
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-transparent p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-md bg-transparent">
               <CardHeader className="text-center">
               <CardTitle>{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
@@ -360,8 +360,8 @@ export default function LoginPage() {
               </CardContent>
           </Card>
         </div>
-        <footer className="w-full border-t border-white/20 py-4">
-          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-foreground">
+        <footer className="w-full border-t py-4">
+          <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
             <div className="text-center">
                 <p className="text-sm font-semibold">

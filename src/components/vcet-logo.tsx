@@ -11,7 +11,7 @@ export function VcetLogo() {
           height={vcetShield.height}
           alt={vcetShield.alt}
           data-ai-hint={vcetShield.hint}
-          className="h-16 w-auto"
+          className="h-14 w-auto"
       />
     </div>
   );
