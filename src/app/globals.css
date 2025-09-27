@@ -4,17 +4,44 @@
 
 /* 1. Define your color palette and core variables */
 :root {
-  --background-dark: #0A0A14; /* Midnight Blue */
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 0%;
+
+  --card: 0 0% 100% / 0.1;
+  --card-foreground: 0 0% 0%;
+
+  --popover: 0 0% 100% / 0.1;
+  --popover-foreground: 0 0% 0%;
+
+  --primary: 35 100% 50%; /* Saffron/Orange */
+  --primary-foreground: 0 0% 0%;
+
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 0 0% 0%;
+
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 0 0% 0%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 0 0% 100% / 0.2;
+  --input: 240 5.9% 90%;
+  --ring: 35 100% 50%;
+
+  --radius: 0.5rem;
+
+  /* Glassmorphism variables (retained for animation) */
+  --background-dark: #1a1a2e; /* A lighter, more saturated dark blue */
   --accent-luminous: #00F2DE;   /* Luminous Teal */
-  --text-primary: #000000;
-  --text-secondary: #A0A0B2;
-  --glass-border-color: rgba(255, 255, 255, 0.1);
-  --glass-bg-color: rgba(18, 18, 30, 0.6);
 }
 
 /* 2. Style the main body with the animated background */
 body {
-  color: var(--text-primary);
+  color: var(--foreground);
   background: var(--background-dark);
   overflow: hidden; /* Hide scrollbars from the main background */
 }
@@ -28,10 +55,10 @@ body::before {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 30%, var(--accent-luminous), transparent 30%),
-    radial-gradient(circle at 80% 70%, #E422F5, transparent 30%);
+    radial-gradient(circle at 20% 30%, var(--accent-luminous), transparent 35%),
+    radial-gradient(circle at 80% 70%, #F542A5, transparent 35%);
   filter: blur(100px);
-  opacity: 0.2;
+  opacity: 0.25;
   animation: float 20s infinite ease-in-out;
   z-index: -1;
 }
