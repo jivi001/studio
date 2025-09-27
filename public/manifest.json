@@ -1,19 +1,19 @@
 {
   "name": "Attendance Monitor",
   "short_name": "Attendance",
-  "description": "An intelligent attendance monitoring and alert system for educational institutions.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#0A102A",
-  "theme_color": "#0A102A",
+  "background_color": "#FF9933",
+  "theme_color": "#FF9933",
+  "description": "An intelligent attendance monitoring and alert system for educational institutions.",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/pwa-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
