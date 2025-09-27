@@ -6,7 +6,7 @@
 :root {
   --background-dark: #0A0A14; /* Midnight Blue */
   --accent-luminous: #00F2DE;   /* Luminous Teal */
-  --text-primary: #F0F0F5;
+  --text-primary: #000000;
   --text-secondary: #A0A0B2;
   --glass-border-color: rgba(255, 255, 255, 0.1);
   --glass-bg-color: rgba(18, 18, 30, 0.6);
@@ -40,21 +40,4 @@ body::before {
   0% { transform: translate(0, 0); }
   50% { transform: translate(30px, -40px); }
   100% { transform: translate(0, 0); }
-}
-
-/* 4. Define a utility class for the glass effect */
-@layer components {
-  .glass-panel {
-    background: var(--glass-bg-color);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px); /* For Safari */
-    border: 1px solid var(--glass-border-color);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    border-radius: 1rem; /* 16px */
-    padding: 2rem;
-    transition: all 0.3s ease;
-  }
-  .glass-panel:hover {
-    border-color: rgba(255, 255, 255, 0.25);
-  }
 }
