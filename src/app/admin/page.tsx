@@ -58,7 +58,7 @@ export default function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight">Admin Dashboard</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Admin Dashboard</h1>
             <p className="mt-2 text-xl text-foreground/80">Welcome to the admin control panel.</p>
           </div>
           <div className="flex items-center gap-2">

@@ -57,7 +57,7 @@ export default function HodDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight">HOD Dashboard</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">HOD Dashboard</h1>
             <p className="mt-2 text-xl text-foreground/80">Welcome to the Head of Department dashboard.</p>
           </div>
           <div className="flex items-center gap-2">
