@@ -1,4 +1,3 @@
-// src/app/login/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -53,13 +52,11 @@ export default function LoginPage() {
       let role = 'staff'; // Default role
 
       if (userSnap.exists()) {
-        // User exists, update last login
         await updateDoc(userRef, {
           lastLogin: serverTimestamp()
         });
         role = userSnap.data().role || 'staff';
       } else {
-        // New user, create profile
         await setDoc(userRef, {
           uid: user.uid,
           displayName: user.displayName || user.email,
@@ -67,7 +64,7 @@ export default function LoginPage() {
           photoURL: user.photoURL,
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
-          role: 'staff' // Assign default role
+          role: 'staff'
         });
       }
       
@@ -76,7 +73,6 @@ export default function LoginPage() {
         description: `Welcome! Requesting notification permissions...`,
       });
 
-      // Request notification permission and save FCM token
       await requestNotificationPermission(user.uid);
 
       router.push(`/${role}`);
@@ -158,7 +154,6 @@ export default function LoginPage() {
   const createDemoAccounts = async () => {
     setDemoLoading(true);
     
-    // Store current user to avoid logging them out
     const originalUser = auth.currentUser;
   
     const demoAccounts = [
@@ -170,10 +165,8 @@ export default function LoginPage() {
     try {
       for (const acc of demoAccounts) {
         try {
-          // Check if user already exists by trying to sign in first
           const userCredential = await signInWithEmailAndPassword(auth, acc.email, acc.password);
           const user = userCredential.user;
-          // User exists, update role if needed
           const userRef = doc(db, 'users', user.uid);
           const userSnap = await getDoc(userRef);
           if (!userSnap.exists() || userSnap.data().role !== acc.role) {
@@ -181,7 +174,6 @@ export default function LoginPage() {
           }
         } catch (error: any) {
           if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-            // User does not exist, create them
             const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
             const user = userCredential.user;
             await setDoc(doc(db, "users", user.uid), {
@@ -193,19 +185,15 @@ export default function LoginPage() {
               role: acc.role
             });
           } else if (error.code !== 'auth/wrong-password') {
-            // Re-throw other errors
             throw error;
           }
         }
       }
       
-      // After creating/updating, sign out the temporary user
       if (auth.currentUser && auth.currentUser.email?.endsWith('@example.com')) {
         await auth.signOut();
       }
   
-      // This part is tricky. Re-authenticating the original user requires credentials.
-      // For this demo, we'll notify the user if they were logged out.
       if (originalUser && !auth.currentUser) {
         toast({
           title: 'You have been signed out',
@@ -226,12 +214,8 @@ export default function LoginPage() {
         variant: 'destructive',
       });
     } finally {
-      // Try to re-sign in the original user if there was one. This might fail.
-      // A more robust solution would require re-authentication.
       if (originalUser && !auth.currentUser) {
-        // Silently try to keep them logged in, but it's not guaranteed
       } else if (auth.currentUser && !originalUser) {
-        // If no one was logged in before, sign out the last demo user
         await auth.signOut();
       }
       setDemoLoading(false);
@@ -241,7 +225,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
-      <div className="hidden lg:flex lg:flex-col items-center justify-center p-8">
+      <div className="hidden bg-muted lg:flex lg:flex-col items-center justify-center p-8">
         <div className="flex items-center gap-4">
             <Image 
               src={headerLogo.src}
@@ -251,19 +235,19 @@ export default function LoginPage() {
               data-ai-hint={headerLogo.hint}
               className="h-12 w-auto"
             />
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Attendance Monitor
             </h1>
         </div>
-        <p className="mt-4 text-center text-xl text-foreground/80 font-medium">
+        <p className="mt-4 text-center text-lg text-muted-foreground font-medium">
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-md mx-auto shadow-none border-0 sm:border sm:shadow-sm">
               <CardHeader className="text-center">
-              <CardTitle>{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
+              <CardTitle className="text-2xl">{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
                   {authMode === 'signin' ? 'Sign in to your account to continue' : 'Enter your details to get started'}
               </CardDescription>
@@ -360,7 +344,7 @@ export default function LoginPage() {
               </CardContent>
           </Card>
         </div>
-        <footer className="w-full border-t border-white/20 py-4 mt-auto">
+        <footer className="w-full border-t py-4 mt-auto">
           <div className="container mx-auto flex items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
           </div>

@@ -1,7 +1,5 @@
-// src/app/admin/page.tsx
 'use client';
 
-import type { Metadata } from 'next';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Timetable } from '@/components/timetable';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,16 +20,11 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { sendAlert } from '@/ai/flows/send-alert-flow';
 
-// export const metadata: Metadata = {
-//   title: 'Admin Dashboard | Attendance Monitor',
-// };
-
 export default function AdminDashboard() {
   const { toast } = useToast();
 
   const handleSendAlert = async () => {
     try {
-      // In a real app, you might want to send a more specific message.
       const alertMessage = "This is an urgent alert from the Admin.";
       const result = await sendAlert({ message: alertMessage, targetRoles: ['hod', 'staff'] });
       
@@ -58,8 +51,8 @@ export default function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">Admin Dashboard</h1>
-            <p className="mt-2 text-xl text-foreground/80">Welcome to the admin control panel.</p>
+            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+            <p className="mt-2 text-muted-foreground">Welcome to the admin control panel.</p>
           </div>
           <div className="flex items-center gap-2">
             <AlertDialog>

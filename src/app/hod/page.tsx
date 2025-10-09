@@ -1,7 +1,5 @@
-// src/app/hod/page.tsx
 'use client';
 
-import type { Metadata } from 'next';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Timetable } from '@/components/timetable';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,10 +19,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useToast } from '@/hooks/use-toast';
 import { sendAlert } from '@/ai/flows/send-alert-flow';
-
-// export const metadata: Metadata = {
-//   title: 'HOD Dashboard | Attendance Monitor',
-// };
 
 export default function HodDashboard() {
   const { toast } = useToast();
@@ -57,8 +51,8 @@ export default function HodDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">HOD Dashboard</h1>
-            <p className="mt-2 text-xl text-foreground/80">Welcome to the Head of Department dashboard.</p>
+            <h1 className="text-3xl font-bold tracking-tight">HOD Dashboard</h1>
+            <p className="mt-2 text-muted-foreground">Welcome to the Head of Department dashboard.</p>
           </div>
           <div className="flex items-center gap-2">
             <AlertDialog>

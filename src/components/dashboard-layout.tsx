@@ -1,4 +1,3 @@
-// src/components/dashboard-layout.tsx
 'use client';
 
 import { ReactNode, useState, useEffect } from 'react';
@@ -70,9 +69,8 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             
             const { notification } = payload;
             
-            // Add to our notifications list
             const newNotification = {
-              id: Date.now(), // simple unique id
+              id: Date.now(), 
               title: notification?.title || 'New Message',
               body: notification?.body || 'You have a new message.',
             };
@@ -80,7 +78,6 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             setNotifications(prev => [newNotification, ...prev]);
             setNotificationCount(prev => prev + 1);
 
-            // Show a toast
             toast({
                 title: notification?.title,
                 description: notification?.body,
@@ -95,7 +92,6 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
 
 
   const handleLogout = () => {
-    // In a real app, you would sign out from Firebase here
     router.push('/login');
   };
   
@@ -115,8 +111,8 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
         description: "Thank you! We've received your feedback.",
       });
 
-      setFeedback(''); // Clear textarea
-      setIsFeedbackDialogOpen(false); // Close dialog
+      setFeedback('');
+      setIsFeedbackDialogOpen(false);
     } else {
       toast({
         title: 'Feedback Empty',
@@ -131,8 +127,8 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-white/20 bg-background/80 px-4 backdrop-blur-xl sm:px-6">
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
           <div className="flex items-center gap-3">
              <Image 
                 src={headerLogo.src}
@@ -140,12 +136,12 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                 height={headerLogo.height}
                 alt={headerLogo.alt}
                 data-ai-hint={headerLogo.hint}
-                className="h-8 w-auto"
+                className="h-6 w-auto"
               />
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
+            <h1 className="text-lg font-semibold tracking-tight">
               Attendance Monitor
             </h1>
-            <Badge variant="outline" className="text-sm border-primary/50 text-primary bg-primary/20">
+            <Badge variant="outline" className="text-sm">
               {role}
             </Badge>
           </div>
@@ -153,7 +149,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Sheet>
               <SheetTrigger asChild>
                 <div className="relative">
-                  <Button variant="outline" size="icon" className="h-9 w-9 bg-transparent hover:bg-white/20 text-foreground hover:text-foreground border-foreground/30">
+                  <Button variant="outline" size="icon" className="h-8 w-8">
                       <Bell className="h-4 w-4" />
                       <span className="sr-only">Toggle notifications</span>
                   </Button>
@@ -164,7 +160,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   )}
                 </div>
               </SheetTrigger>
-              <SheetContent className="bg-background/80 backdrop-blur-xl">
+              <SheetContent>
                   <SheetHeader>
                       <SheetTitle>Notifications</SheetTitle>
                       <SheetDescription>
@@ -174,7 +170,7 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                   <div className="mt-4 space-y-4">
                     {notifications.length > 0 ? (
                         notifications.map(notif => (
-                          <div key={notif.id} className="p-3 rounded-lg border bg-card/80 text-card-foreground flex justify-between items-start gap-2">
+                          <div key={notif.id} className="p-3 rounded-lg border bg-card text-card-foreground flex justify-between items-start gap-2">
                                 <div className="flex flex-col">
                                     <p className="font-medium">{notif.title}</p>
                                     <p className="text-xs text-muted-foreground">{notif.body}</p>
@@ -193,14 +189,14 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
             <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-9 w-9 bg-transparent hover:bg-white/20 border-foreground/30">
-                    <Avatar className="h-9 w-9">
+                  <Button variant="outline" size="icon" className="overflow-hidden rounded-full h-8 w-8">
+                    <Avatar className="h-8 w-8">
                       <AvatarImage src={userAvatar.src} alt={userAvatar.alt} data-ai-hint={userAvatar.hint} />
                       <AvatarFallback>{role.charAt(0)}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-background/80 backdrop-blur-xl">
+                <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator/>
                   <DropdownMenuItem>
@@ -235,7 +231,6 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
                       rows={6}
                       value={feedback}
                       onChange={(e) => setFeedback(e.target.value)}
-                      className="bg-transparent"
                     />
                   </div>
                 </div>
@@ -252,11 +247,11 @@ export function DashboardLayout({ children, role, title = 'Attendance Monitor' }
           </div>
         </header>
         <main className="flex-1 p-4 md:p-8">{children}</main>
-        <footer className="mt-auto border-t border-white/20 py-4">
+        <footer className="mt-auto border-t bg-background py-4">
           <div className="container mx-auto flex flex-col items-center justify-center gap-4 py-8 px-4 text-center">
             <VcetLogo />
             <div className="text-center">
-                <p className="text-sm font-semibold text-foreground">
+                <p className="text-sm font-medium">
                 © {new Date().getFullYear()} Velalar College of Engineering and Technology. All Rights Reserved.
                 </p>
                 <p className="text-xs text-muted-foreground">
