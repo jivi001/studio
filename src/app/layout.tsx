@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import { Poppins, Roboto } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-
-const fontHeadline = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-headline',
-});
-
-const fontBody = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-body',
-});
 
 export const metadata: Metadata = {
   title: 'Attendance Monitor',
@@ -23,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#FF9933',
+  themeColor: '#FFFFFF',
 };
 
 export default function RootLayout({
@@ -35,13 +24,14 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#FF9933" />
+        <meta name="theme-color" content="#FFFFFF" />
+        <meta name="description" content="An intelligent attendance monitoring and alert system for educational institutions." />
       </head>
       <body
         className={cn(
-          'h-full font-body antialiased',
-          fontBody.variable,
-          fontHeadline.variable
+          'h-full font-sans antialiased',
+          GeistSans.variable,
+          GeistMono.variable
         )}
       >
         {children}

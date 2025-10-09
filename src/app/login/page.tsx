@@ -228,6 +228,7 @@ export default function LoginPage() {
       <div className="hidden bg-muted lg:flex lg:flex-col items-center justify-center p-8">
         <div className="flex items-center gap-4">
             <Image 
+              priority
               src={headerLogo.src}
               width={headerLogo.width}
               height={headerLogo.height}
@@ -235,11 +236,11 @@ export default function LoginPage() {
               data-ai-hint={headerLogo.hint}
               className="h-12 w-auto"
             />
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Attendance Monitor
             </h1>
         </div>
-        <p className="mt-4 text-center text-lg text-muted-foreground font-medium">
+        <p className="mt-4 text-center text-xl text-muted-foreground font-medium">
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
@@ -247,7 +248,7 @@ export default function LoginPage() {
         <div className='flex-grow flex items-center justify-center w-full'>
           <Card className="w-full max-w-md mx-auto shadow-none border-0 sm:border sm:shadow-sm">
               <CardHeader className="text-center">
-              <CardTitle className="text-2xl">{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
+              <CardTitle className="text-3xl">{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
                   {authMode === 'signin' ? 'Sign in to your account to continue' : 'Enter your details to get started'}
               </CardDescription>
