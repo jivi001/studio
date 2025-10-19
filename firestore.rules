@@ -2,17 +2,14 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Rules for the 'users' collection
-    match /users/{userId} {
-      // Any authenticated user can create a user document.
-      // This is necessary for the 'Create Demo Accounts' feature.
-      allow create: if request.auth != null;
+    // By default, deny all reads and writes.
+    match /{document=**} {
+      allow read, write: if false;
+    }
 
-      // Only the authenticated user can read or update their own document.
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-      
-      // No one can delete user documents.
-      allow delete: if false;
+    // Allow users to read and write to their own user document.
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
     }
   }
 }
