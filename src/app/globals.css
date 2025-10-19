@@ -2,36 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 1. Define your color palette and core variables */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
+  --background-dark: #0A0A14; /* Midnight Blue */
+  --accent-luminous: #00F2DE;   /* Luminous Teal */
+  --text-primary: #F0F0F5;
+  --text-secondary: #A0A0B2;
+  --glass-border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg-color: rgba(18, 18, 30, 0.6);
 
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
+  --background: 222 84% 4.9%;
+  --foreground: 210 40% 98%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
+  --card: 222 84% 4.9%;
+  --card-foreground: 210 40% 98%;
 
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
+  --popover: 222 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
 
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222 47% 11%;
 
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
 
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
 
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 98%;
 
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 240 10% 3.9%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 210 40% 98%;
 
   --radius: 0.5rem;
+}
+
+/* 2. Style the main body with the animated background */
+body {
+  color: var(--text-primary);
+  background: var(--background-dark);
+  overflow: hidden; /* Hide scrollbars from the main background */
+}
+
+/* 3. Create the animated, abstract background effect */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, var(--accent-luminous), transparent 30%),
+    radial-gradient(circle at 80% 70%, #E422F5, transparent 30%);
+  filter: blur(100px);
+  opacity: 0.2;
+  animation: float 20s infinite ease-in-out;
+  z-index: -1;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -40px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* 4. Define a utility class for the glass effect */
+@layer components {
+  .glass-panel {
+    background: var(--glass-bg-color);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px); /* For Safari */
+    border: 1px solid var(--glass-border-color);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 1rem; /* 16px */
+    padding: 2rem;
+    transition: all 0.3s ease;
+  }
+  .glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+  }
 }
 
 @layer base {
@@ -40,5 +95,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

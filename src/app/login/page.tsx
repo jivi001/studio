@@ -246,7 +246,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
-      <div className="hidden bg-muted lg:flex lg:flex-col items-center justify-center p-8">
+      <div className="hidden bg-transparent lg:flex lg:flex-col items-center justify-center p-8">
         <div className="flex items-center gap-4">
             <Image 
               priority
@@ -265,9 +265,9 @@ export default function LoginPage() {
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <main className="flex flex-col items-center justify-center min-h-screen p-4 glass-panel">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md mx-auto shadow-none border-0 sm:border sm:shadow-sm">
+          <Card className="w-full max-w-md mx-auto shadow-none border-0 sm:border sm:shadow-sm bg-transparent">
               <CardHeader className="text-center">
               <CardTitle className="text-3xl">{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
@@ -303,7 +303,7 @@ export default function LoginPage() {
                       </FormItem>
                       )}
                   />
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" disabled={loading}>
                       {loading ? 'Submitting...' : (authMode === 'signin' ? 'Sign In' : 'Sign Up')}
                   </Button>
                   </form>
@@ -330,7 +330,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                  <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
+                  <Button variant="outline" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" onClick={handleGoogleSignIn} disabled={googleLoading}>
                   {googleLoading ? (
                       'Signing in...'
                   ) : (
@@ -355,7 +355,7 @@ export default function LoginPage() {
                   )}
                   </Button>
                   <div className='text-center'>
-                  <Button variant="secondary" className="w-full" onClick={createDemoAccounts} disabled={demoLoading}>
+                  <Button variant="secondary" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" onClick={createDemoAccounts} disabled={demoLoading}>
                       {demoLoading ? 'Creating...' : 'Create Demo Accounts'}
                   </Button>
                   <CardDescription className="text-xs text-muted-foreground mt-2 px-4">
@@ -371,9 +371,7 @@ export default function LoginPage() {
             <VcetLogo />
           </div>
         </footer>
-      </div>
+      </main>
     </div>
   );
 }
-
-    
