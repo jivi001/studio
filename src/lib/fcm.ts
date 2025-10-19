@@ -1,8 +1,9 @@
-// src/lib/fcm.ts
 'use client';
 
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, messaging, getToken } from './firebase';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 // =================================================================================================
 // IMPORTANT! You MUST replace this placeholder with the key from your Firebase project.
@@ -34,10 +35,17 @@ export const requestNotificationPermission = async (userId: string) => {
         console.log('FCM Token:', fcmToken);
         // Save the token to the user's document in Firestore
         const userRef = doc(db, "users", userId);
-        await updateDoc(userRef, {
-          fcmToken: fcmToken,
-        });
-        console.log('FCM token saved to Firestore.');
+        const updateData = { fcmToken: fcmToken };
+        updateDoc(userRef, updateData)
+          .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userRef.path,
+              operation: 'update',
+              requestResourceData: updateData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+          });
+        console.log('FCM token queued for saving to Firestore.');
       } else {
         console.log('Can not get token. Ensure you have a firebase-messaging-sw.js file in your public directory.');
       }
@@ -48,5 +56,3 @@ export const requestNotificationPermission = async (userId: string) => {
     console.error('An error occurred while requesting notification permission. ', error);
   }
 };
-
-    

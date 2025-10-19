@@ -19,6 +19,8 @@ import { requestNotificationPermission } from '@/lib/fcm';
 import { VcetLogo } from '@/components/vcet-logo';
 import placeholderImages from '@/lib/placeholder-images.json';
 import Image from 'next/image';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -52,12 +54,19 @@ export default function LoginPage() {
       let role = 'staff'; // Default role
 
       if (userSnap.exists()) {
-        await updateDoc(userRef, {
-          lastLogin: serverTimestamp()
-        });
+        const updateData = { lastLogin: serverTimestamp() };
+        updateDoc(userRef, updateData)
+          .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userRef.path,
+              operation: 'update',
+              requestResourceData: updateData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+          });
         role = userSnap.data().role || 'staff';
       } else {
-        await setDoc(userRef, {
+        const createData = {
           uid: user.uid,
           displayName: user.displayName || user.email,
           email: user.email,
@@ -65,7 +74,16 @@ export default function LoginPage() {
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
           role: 'staff'
-        });
+        };
+        setDoc(userRef, createData)
+          .catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userRef.path,
+              operation: 'create',
+              requestResourceData: createData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+          });
       }
       
       toast({
@@ -191,20 +209,39 @@ export default function LoginPage() {
           const userRef = doc(db, 'users', user.uid);
           const userSnap = await getDoc(userRef);
           if (!userSnap.exists() || userSnap.data().role !== acc.role) {
-            await setDoc(userRef, { role: acc.role }, { merge: true });
+            const setData = { role: acc.role };
+            setDoc(userRef, setData, { merge: true })
+              .catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                  path: userRef.path,
+                  operation: 'update',
+                  requestResourceData: setData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+              });
           }
         } catch (error: any) {
           if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
             const userCredential = await createUserWithEmailAndPassword(auth, acc.email, acc.password);
             const user = userCredential.user;
-            await setDoc(doc(db, "users", user.uid), {
+            const userRef = doc(db, "users", user.uid);
+            const createData = {
               uid: user.uid,
               displayName: acc.email,
               email: acc.email,
               createdAt: serverTimestamp(),
               lastLogin: serverTimestamp(),
               role: acc.role
-            });
+            };
+            setDoc(userRef, createData)
+              .catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                  path: userRef.path,
+                  operation: 'create',
+                  requestResourceData: createData,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+              });
           } else if (error.code !== 'auth/wrong-password') {
             throw error;
           }
@@ -265,9 +302,9 @@ export default function LoginPage() {
             An intelligent attendance monitoring and alert system for educational institutions.
         </p>
       </div>
-      <main className="flex flex-col items-center justify-center min-h-screen p-4 glass-panel">
+      <main className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className='flex-grow flex items-center justify-center w-full'>
-          <Card className="w-full max-w-md mx-auto shadow-none border-0 sm:border sm:shadow-sm bg-transparent">
+          <Card className="w-full max-w-md mx-auto">
               <CardHeader className="text-center">
               <CardTitle className="text-3xl">{authMode === 'signin' ? 'Welcome Back' : 'Create an Account'}</CardTitle>
               <CardDescription>
@@ -303,7 +340,7 @@ export default function LoginPage() {
                       </FormItem>
                       )}
                   />
-                  <Button type="submit" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" disabled={loading}>
+                  <Button type="submit" className="w-full" disabled={loading}>
                       {loading ? 'Submitting...' : (authMode === 'signin' ? 'Sign In' : 'Sign Up')}
                   </Button>
                   </form>
@@ -330,7 +367,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                  <Button variant="outline" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" onClick={handleGoogleSignIn} disabled={googleLoading}>
+                  <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={googleLoading}>
                   {googleLoading ? (
                       'Signing in...'
                   ) : (
@@ -355,7 +392,7 @@ export default function LoginPage() {
                   )}
                   </Button>
                   <div className='text-center'>
-                  <Button variant="secondary" className="w-full glass-panel !py-3 !px-6 !rounded-lg font-semibold border-accent-luminous hover:bg-[var(--accent-luminous)] hover:text-black" onClick={createDemoAccounts} disabled={demoLoading}>
+                  <Button variant="secondary" className="w-full" onClick={createDemoAccounts} disabled={demoLoading}>
                       {demoLoading ? 'Creating...' : 'Create Demo Accounts'}
                   </Button>
                   <CardDescription className="text-xs text-muted-foreground mt-2 px-4">

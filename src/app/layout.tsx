@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 export const metadata: Metadata = {
   title: 'Attendance Monitor',
@@ -36,6 +37,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
+        <FirebaseErrorListener />
       </body>
     </html>
   );
