@@ -73,7 +73,28 @@ export default function LoginPage() {
         description: `Welcome! Requesting notification permissions...`,
       });
 
-      await requestNotificationPermission(user.uid);
+      if ('serviceWorker' in navigator) {
+        const firebaseConfig = {
+            apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+            authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+            projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+            storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+            appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+        };
+        const swUrl = `/firebase-messaging-sw.js?firebaseConfig=${encodeURIComponent(JSON.stringify(firebaseConfig))}`;
+        
+        navigator.serviceWorker.register(swUrl)
+        .then(async (swReg) => {
+            console.log('Service Worker is registered', swReg);
+            await requestNotificationPermission(user.uid);
+        }).catch((err) => {
+            console.error('Service Worker Error', err);
+        });
+      } else {
+        await requestNotificationPermission(user.uid);
+      }
+
 
       router.push(`/${role}`);
     } else {
@@ -354,3 +375,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

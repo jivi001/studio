@@ -48,3 +48,5 @@ export const requestNotificationPermission = async (userId: string) => {
     console.error('An error occurred while requesting notification permission. ', error);
   }
 };
+
+    
